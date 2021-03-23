@@ -73,6 +73,8 @@ export default {
     .menu{
         background-color: #24344b;
         width: 260px;
+        min-width: 260px;
+        max-width: 260px;
         height: 100vh;
         margin:  0px;
     }

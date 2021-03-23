@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             primaryBtn: 'button',
-            pathImage : 'background-image:url(../../assets/image/'+image+')'
+            pathImage : 'background-image:url(../../assets/image/'+this.image+')',
         }
     },
     created() {
