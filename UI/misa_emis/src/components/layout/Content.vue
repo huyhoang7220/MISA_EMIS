@@ -89,6 +89,11 @@
                     </tr>
                 </table>
             </div>
+            <div class="footer">
+                <div class="result">
+                    Tổng số: <span>7</span> kết quả.
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -194,26 +199,29 @@ export default {
         padding-right: 16px;
         overflow: auto;
         width: calc(100% - 32px);
+        height: calc(100% - 106px);
     }
     .th-text{
         line-height: 24px;
-        margin-bottom: 4px;
+        margin-bottom: 12px;
     }
     .grid-list table{
         border: 0;
         width: 100%;
+        padding: -1px;
     }
     .grid-list table tr{
         width: fit-content;
     }
     
     .grid-list table tr th{
-        padding: 8px 12px;
+        padding: 8px 8px;
         font-size: 13px;
         font-family: OpenSan-Semibold;
         border: 1px solid#D5D8E6;
         text-align: center;
         border-right: 0px;
+        background-color:#f5f6fa;
     }
     .grid-list table tr th:last-child{
         border-right: 1px solid #D5D8E6;
@@ -225,12 +233,16 @@ export default {
         width: 100%;
     }
     .btn-filter input{
-        width: calc(100% - 32px);
+        width: calc(100% - 36px);
         background-image: url('../../assets/image/ic_Filter.svg');
         background-position: 0px;
         background-repeat: no-repeat;
-        padding-left: 24px;
-        border: 1px solid #;
+        padding-left: 32px;
+        border: 1px solid  #D5D8E6;
+        height: 28px;
+    }
+    .btn-filter input:focus{
+        outline: none;
     }
     .grid-list table tr td{
         height: 32px;
@@ -267,5 +279,14 @@ export default {
         background-repeat: no-repeat;
         background-size: contain;
         background-position: center;
+    }
+    .footer{
+        height: 60px;
+        width: 100%;
+        padding: 10px 16px;
+        box-sizing: border-box;
+    }
+    .result{
+        font-size: 13px;
     }
 </style>
