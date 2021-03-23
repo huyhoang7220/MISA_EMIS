@@ -25,11 +25,11 @@
                     <label for="">Hiển thị khoản thu ngừng theo dõi</label>
                 </div>
                 <div class="filter-right">
-                    <Button 
-                        :text="text"
-                        :second="second"/>
-                    <Button 
-                        :text="'Sắp lại thứ tự'" 
+                    <NewButton 
+                        :Text="'Thêm mới'"
+                        :second="false"/>
+                    <NewButton 
+                    :Text="'Sắp lại thứ tự'"
                         :second="true"/>
                     <div class="delete"></div>
                 </div>
@@ -40,7 +40,7 @@
 
 <script>
 
-import Button from './Button.vue'
+import NewButton from './Button.vue'
 export default {
     data() {
         return {
@@ -48,8 +48,8 @@ export default {
             second: false
         }
     },
-    comments:{
-        Button
+    components:{
+        NewButton,
     }
 }
 </script>
@@ -107,5 +107,7 @@ export default {
         justify-content: space-between;
         align-items: center;
     }
-   
+    .filter-right{
+        display: flex;
+    }
 </style>

@@ -1,19 +1,21 @@
 <template>
-    <div class="button" v-bind:class="{'second-button':second}">
-        {{text}}
-    </div>
+        <div class="button" :class="{'second-button':second}" :style="pathImage">
+            {{Text}}
+        </div>
 </template>
 
 <script>
+
 export default {
-    props:{
-        text: String,
-        second: Boolean
-    },
+    props:['Text','second','image'],
     data() {
         return {
-            
+            primaryBtn: 'button',
+            pathImage : 'background-image:url(../../assets/image/'+image+')'
         }
+    },
+    created() {
+        console.log(this.Text, this.second);
     },
 }
 </script>
@@ -28,10 +30,16 @@ export default {
         color: #FFFFFF;
         margin: 0px 0px 0px 8px;
         border-radius: 4px;
+        background: #03ae66;
+        line-height: 32px;
+        text-align: center;
+        background-position: center;
+        background-size: contain;
     }
     .button:hover{
         background-color: #02BF70;
         color: #FFFFFF;
+        cursor: pointer;
     }
     .button:disabled{
         background-color: #e0e0e0;
@@ -46,6 +54,7 @@ export default {
     .second-button:hover{
         background-color: #f8f8f8 !important;
         cursor: pointer;
+        color: #000000;
     }
     .second-button:disabled{
         background-color: #e0e0e0;

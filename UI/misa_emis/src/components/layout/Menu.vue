@@ -127,7 +127,9 @@ export default {
         cursor: pointer;
     }
     .nav-item:hover{
-        background-color:#24344b;
+        background-color:#4D4F5C;
+        border-left: 4px solid #03ae66;
+        color: #03ae66;
     }
     .nav-item-icon{
         width: 32px;
