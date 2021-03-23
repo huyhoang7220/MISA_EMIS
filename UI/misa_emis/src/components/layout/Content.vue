@@ -40,24 +40,30 @@
             </div>
 
             <div class="grid-list">
+                <div class="outline-table">
                 <table cellspacing="0" cellpadding="0">
                     <tr>
                         <th colspan="1"> </th>
-                        <th colspan="1">
+                        <th colspan="1" width="400px">
                             <div class="th-text">Tên khoản thu</div>
                             <div class="btn-filter"><input type="text" id=""></div>
                         </th>
-                        <th colspan="1">
+                        <th colspan="1" width="250px">
                             <div class="th-text">Nhóm khoản thu</div>
                             <div class="btn-filter"><input type="text" id=""></div>
                         </th>
-                        <th colspan="1">
+                        <th colspan="1" width="250px">
                             <div class="th-text">Mức thu</div>
                             <div class="btn-filter"><input type="text" id=""></div>
                         </th>
-                        <th colspan="1">
+                        <th colspan="1" width="100px">
                             <div class="th-text">Kỳ thu</div>
-                            <div class="btn-filter"><input type="text" id=""></div>
+                            <div class="btn-filter">
+                                <select >
+                                    <option value=""> </option>
+                                    <option value=""> </option>
+                                </select>
+                            </div>
                         </th>
                         <th colspan="1" class="td-to-check">Áp dụng miễn giảm</th>
                         <th colspan="1" class="td-to-check">Cho xuất hóa đơn</th>
@@ -66,6 +72,7 @@
                         <th colspan="1" class="td-to-check">Khoản thu bắt buộc</th>
                         <th colspan="1" class="td-to-check">Đang theo dõi</th>
                         <th colspan="1"></th>
+
                     </tr>
                     <tr class="line-forcus">
                         <td colspan="1"><div class="select-line" 
@@ -73,25 +80,28 @@
                             :class="{'selected-line':false}"></div></td>
                         <td colspan="1">Học phí</td>
                         <td colspan="1">Đồng phục</td>
-                        <td colspan="1">40.000đ/tháng</td>
-                        <td colspan="1"></td>
-                        <td colspan="1"><div class="cell-checking"></div></td>
-                        <td colspan="1"><div class="cell-checking"></div></td>
-                        <td colspan="1"><div class="cell-checking"></div></td>
-                        <td colspan="1"><div class="cell-checking"></div></td>
-                        <td colspan="1"><div class="cell-checking"></div></td>
-                        <td colspan="1"><div class="cell-checking"></div></td>
+                        <td colspan="1" class="align-right-text">40.000đ/tháng</td>
+                        <td colspan="1" class="td-to-check"></td>
+                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
+                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
+                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
+                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
+                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
+                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
                         <td colspan="1">
-                            <div class="btn-edit"></div>
-                            <div class="btn-copy"></div>
-                            <div class="btn-delete"></div>
+                            <div class="last-cell">
+                                <div class="btn-edit"></div>
+                                <div class="btn-copy"></div>
+                                <div class="btn-delete"></div>
+                            </div>
                         </td>
                     </tr>
                 </table>
+                </div>
             </div>
             <div class="footer">
                 <div class="result">
-                    Tổng số: <span>7</span> kết quả.
+                    Tổng số: <span class="count">7</span> kết quả.
                 </div>
             </div>
         </div>
@@ -197,51 +207,66 @@ export default {
     .grid-list{
         padding-left: 16px;
         padding-right: 16px;
-        overflow: auto;
         width: calc(100% - 32px);
         height: calc(100% - 106px);
     }
     .th-text{
         line-height: 24px;
         margin-bottom: 12px;
+        white-space: nowrap;
+    }
+
+    .outline-table{
+        overflow: auto;
+        width: 100%;
+        height: 100%;
+        border: 1px solid #D5D8E6;
+        border-collapse: collapse;
+        padding: 0px;
+        z-index: 20;
     }
     .grid-list table{
-        border: 0;
-        width: 100%;
-        padding: -1px;
+        border: 0px;
+        width: auto;
+        border-collapse: collapse;
+        margin: 0px;
     }
     .grid-list table tr{
         width: fit-content;
     }
-    
+    .grid-list table tr:nth-child(odd){
+        background-color:#e5f3ff;
+    }
     .grid-list table tr th{
         padding: 8px 8px;
         font-size: 13px;
         font-family: OpenSan-Semibold;
         border: 1px solid#D5D8E6;
         text-align: center;
-        border-right: 0px;
         background-color:#f5f6fa;
     }
-    .grid-list table tr th:last-child{
-        border-right: 1px solid #D5D8E6;
-    }
     .td-to-check{
-        width: 70px;
+        min-width: 82px;
     }
     .btn-filter{
         width: 100%;
+        display: flex;
     }
     .btn-filter input{
-        width: calc(100% - 36px);
+        width: 100%;
         background-image: url('../../assets/image/ic_Filter.svg');
         background-position: 0px;
         background-repeat: no-repeat;
-        padding-left: 32px;
+        padding-left: 24px;
         border: 1px solid  #D5D8E6;
-        height: 28px;
+        height: 20px;
     }
-    .btn-filter input:focus{
+    .btn-filter select{
+        width: 100%;
+        height: 20px;
+        border: 1px solid  #D5D8E6;
+    }
+    .btn-filter input,select:focus{
         outline: none;
     }
     .grid-list table tr td{
@@ -250,11 +275,11 @@ export default {
         border: 1px solid  #D5D8E6;
         font-size: 13px;
         font-family: OpenSan-Regular;
-        border-top: 0px;
-        border-right: 0px;
+        padding-left: 12px;
+        padding-right: 12px;
     }
-    .grid-list table tr td:last-child{
-        border-right: 1px solid #D5D8E6;
+    .grid-list table tr td:first-child{
+        max-width: 36px !important;
     }
     .line-forcus{
         background-color: #cce8ff;
@@ -288,5 +313,31 @@ export default {
     }
     .result{
         font-size: 13px;
+        font-display: OpenSan-Regular;
+    }
+    .count{
+        font-family: OpenSan-bold;
+    }
+    .last-cell{
+        display: flex;
+        align-items: center;
+    }
+    .btn-edit, .btn-copy, .btn-delete{
+        width: 24px;
+        height: 24px;
+        background-position: center;
+        background-size: contain;
+    }
+    .btn-edit{
+        background-image: url('../../assets/image/ic_Edit.svg');
+    }
+    .btn-copy{
+        background-image: url('../../assets/image/ic_Duplicate_24.svg');
+    }
+    .btn-delete{
+        background-image: url('../../assets/image/ic_Remove2.svg');
+    }
+    .align-right-text{
+        text-align: right !important;
     }
 </style>

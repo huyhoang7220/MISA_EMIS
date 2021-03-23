@@ -131,6 +131,8 @@ export default {
     .nav-item:hover{
         background-color:#4D4F5C;
         border-left: 4px solid #03ae66;
+    }
+    .nav-item:hover .nav-item-text{
         color: #03ae66;
     }
     .nav-item-icon{

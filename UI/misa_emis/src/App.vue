@@ -5,6 +5,7 @@
       <Header/>
       <Content/>
     </div>
+    <detail v-show="false"/>
   </div>
 </template>
 
@@ -12,13 +13,14 @@
 import Menu from './components/layout/Menu.vue'
 import Header from './components/layout/Header.vue'
 import Content from './components/layout/Content.vue'
-
+import detail from './components/Revenue/RevenueDetail.vue'
 export default {
   name: 'App',
   components: {
     Menu,
     Header,
-    Content
+    Content,
+    detail
   }
 }
 </script>
