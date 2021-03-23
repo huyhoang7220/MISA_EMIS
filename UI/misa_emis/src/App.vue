@@ -5,7 +5,7 @@
       <Header/>
       <Content/>
     </div>
-    <detail v-show="false"/>
+    <detail v-show="true"/>
   </div>
 </template>
 

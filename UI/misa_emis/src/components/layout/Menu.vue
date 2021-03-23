@@ -120,7 +120,7 @@ export default {
         width: 100%
     }
     .nav-item{
-        width: 100%;
+        width: auto;
         height: 46px;
         display: flex;
         align-items: center;
@@ -130,10 +130,10 @@ export default {
     }
     .nav-item:hover{
         background-color:#4D4F5C;
-        border-left: 4px solid #03ae66;
+        border-left: 4px solid #00d469;
     }
     .nav-item:hover .nav-item-text{
-        color: #03ae66;
+        color: #00d469;
     }
     .nav-item-icon{
         width: 32px;
