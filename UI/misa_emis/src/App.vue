@@ -54,7 +54,7 @@ body{
   display: flex;
 }
 .right-box{
-  width: calc(100% - 260px);
+  width: calc(100% - 220px);
 }
 select, input{
   font-family: OpenSan-Regular;

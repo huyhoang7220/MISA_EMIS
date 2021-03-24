@@ -76,11 +76,12 @@
                         <th colspan="1"></th>
 
                     </tr>
-                    <tr class="line-forcus">
+                    <tr v-for="fee in Fees" :key="fee.feeId">
                         <td colspan="1"><div class="select-line" 
                             @click="checkLine()" 
-                            :class="{'selected-line':false}"></div></td>
-                        <td colspan="1">Học phí</td>
+                            :class="{'selected-line':false}"></div>
+                        </td>
+                        <td colspan="1">{{fee.feeName}}</td>
                         <td colspan="1">Đồng phục</td>
                         <td colspan="1" class="align-right-text">40.000đ/tháng</td>
                         <td colspan="1" class="td-to-check"></td>
@@ -112,7 +113,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 import NewButton from '../layout/Button.vue'
 import Detail from './RevenueDetail.vue'
 export default {
@@ -122,7 +123,8 @@ export default {
             second: false,
             selectedCheck: false,
             show: false,
-            focus: false
+            focus: false,
+            Fees:{}
         }
     },
     components:{
@@ -140,7 +142,11 @@ export default {
         CloseForm:function(){
             this.show = false;
         }
-    }
+    },
+    async created() {
+        const res = await axios.get('https://localhost:44341/api/v1/fee');
+        this.Fees = res.data
+    },
 }
 </script>
 

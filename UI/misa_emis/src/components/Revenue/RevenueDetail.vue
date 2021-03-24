@@ -85,25 +85,29 @@
                 <div class="form-right">
                     <div class="form-r-col">
                         <div class="row-check">
-                            <div class="check-box check-box-checked"></div>
+                            <input type="checkbox">
+                            <label></label>
                             <div class="col-row-text">
                                 Áp dụng miễn giảm
                             </div>
                         </div>
                         <div class="row-check">
-                            <div class="check-box"></div>
+                            <input type="checkbox">
+                            <label></label>
                             <div class="col-row-text">
                                 Khoản thu bắt buộc
                             </div>
                         </div>
                         <div class="row-check">
-                            <div class="check-box check-box-checked"></div>
+                            <input type="checkbox">
+                            <label></label>
                             <div class="col-row-text">
                                 Cho phép xuất hóa đơn
                             </div>
                         </div>
                         <div class="row-check">
-                            <div class="switch-check"></div>
+                            <input type="checkbox" class="switch-btn">
+                            <label></label>
                             <div class="col-row-text">
                                 Phân loại đăng ký
                             </div>
@@ -111,19 +115,22 @@
                     </div>
                     <div class="form-r-col">
                          <div class="row-check">
-                            <div class="check-box"></div>
+                            <input type="checkbox" checked>
+                            <label></label>
                             <div class="col-row-text">
                                 Cho phép xuất chứng từ
                             </div>
                         </div>
                         <div class="row-check">
-                            <div class="check-box check-box-checked"></div>
+                            <input type="checkbox">
+                            <label></label>
                             <div class="col-row-text">
                                 Cho phép hoàn trả
                             </div>
                         </div>
                         <div class="row-check">
-                            <div class="check-box"></div>
+                            <input type="checkbox">
+                            <label></label>
                             <div class="col-row-text">
                                 Thu nội bộ
                             </div>
@@ -134,7 +141,8 @@
             <div class="form-footer">
                 <div class="f-footer-left">
                     <div class="row-check non-margin">
-                        <div class="check-box"></div>
+                        <input type="checkbox">
+                        <label></label>
                         <div class="col-row-text">
                             Ngừng theo dõi
                         </div>
@@ -348,17 +356,46 @@ export default {
         align-items: center;
          margin-bottom: 24px;
     }
-    .check-box{
-        width: 16px;
-        height: 16px;
+
+    .row-check input[type="checkbox"]:checked,
+    .row-check input[type="checkbox"]:not(:checked){
+        position: absolute;
+        opacity: 0;
+        padding: 0px;
+        margin: 0px;
+    }
+    
+    .row-check input[type="checkbox"]:checked + label{
+        
+        background-image: url('../../assets/image/ic_Checkbox_Active.svg');
+        
+    }
+    .row-check input[type="checkbox"] + label{
         background-image: url('../../assets/image/ic_Checkbox_Inactive.svg');
         background-position: center;
         background-size: contain;
         background-repeat: no-repeat;
+        width: 16px;
+        height: 16px;
     }
-    .check-box-checked{
-        background-image: url('../../assets/image/ic_Checkbox_Active.svg') !important;
+    .row-check input.switch-btn[type="checkbox"]{
+        width: 16px;
+        height: 16px;
     }
+    .row-check input.switch-btn[type="checkbox"]:checked + label{
+        
+        background-image: url('../../assets/image/Toggle On_.svg');
+
+    }
+    .row-check input.switch-btn[type="checkbox"] + label{
+        background-image: url('../../assets/image/ic_Switch_Inactive.svg');
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 24px;
+    }
+
     .col-row-text{
         font-family: OpenSan-Regular;
         font-size: 13px;
