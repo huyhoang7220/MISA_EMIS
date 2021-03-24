@@ -1,6 +1,6 @@
 <template>
     <div class="input">
-        <input type="text" class="textbox">
+        <input type="text" ref="textbox" class="textbox" :class="{'margin-r-16':margin}">
     </div>
 </template>
 
@@ -9,13 +9,22 @@
 export default {
     props:{
         placeHolder: String,
-        focus: Boolean
+        focus: Boolean,
+        margin: Boolean,
+    },
+    watch:{
+        focus:function(){
+            this.$nextTick(()=>{
+                this.$refs.textbox.focus();
+            })
+        }
     }
 }
 </script>
 
 <style lang="css" scoped>
     .input{
+        width: 100%;
         display: flex;
     }
     .textbox{
@@ -29,11 +38,12 @@ export default {
         flex-grow: 1;
         flex-shrink: 1;
         flex-basis: 0%;
-        margin-right: 16px;
     }
     .textbox:focus{
         outline: none;
         border: 1px solid #00d469;
     }
-   
+    .margin-r-16{
+        margin-right: 16px;
+    }
 </style>

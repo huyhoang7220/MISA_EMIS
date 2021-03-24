@@ -91,6 +91,7 @@ export default {
         border: 1px solid #CECECE;
         padding: 0px 12px;
         border-radius: 4px;
+        margin-right: 16px;
     }
     .hr-item2 select:focus{
         outline: none;
@@ -98,6 +99,7 @@ export default {
     .hr-item3{
         display: flex;
         height: 32px;
+        border-left: 1px solid #CCCCCC;
     }
     .hr-item-icon1, .hr-item-icon2{
         width: 32px;
@@ -109,6 +111,7 @@ export default {
     }
     .hr-item-icon1{
         background-image: url('../../assets/image/search.svg');
+        
     }
     .hr-item-icon2{
         background-image: url('../../assets/image/Avatar.png');

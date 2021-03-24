@@ -49,7 +49,7 @@ export default {
     .second-button{
         background-color: #FFFFFF !important;
         color: #3d3f4e;
-        border: 1px solid #0FA655;
+        border: 1px solid #CCCCCC;
     }
     .second-button:hover{
         background-color: #f8f8f8 !important;

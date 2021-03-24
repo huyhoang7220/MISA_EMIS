@@ -29,7 +29,9 @@
                 <div class="filter-right">
                     <NewButton 
                         :Text="'Thêm mới'"
-                        :second="false"/>
+                        :second="false"
+                        @click="OpenForm()"
+                        />
                     <NewButton 
                     :Text="'Sắp lại thứ tự'"
                         :second="true"/>
@@ -105,27 +107,38 @@
                 </div>
             </div>
         </div>
+        <Detail v-show="show" @CloseForm="CloseForm()" :focus="focus"/>
     </div>
 </template>
 
 <script>
 
 import NewButton from '../layout/Button.vue'
+import Detail from './RevenueDetail.vue'
 export default {
     data() {
         return {
             text: 'Thêm mới',
             second: false,
-            selectedCheck: false
+            selectedCheck: false,
+            show: false,
+            focus: false
         }
     },
     components:{
         NewButton,
-        
+        Detail,
     },
     methods:{
         check: function(){
             this.selectedCheck =! this.selectedCheck;
+        }
+        ,OpenForm: function(){
+            this.show = true;
+            this.focus = !this.focus
+        },
+        CloseForm:function(){
+            this.show = false;
         }
     }
 }
