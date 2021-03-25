@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MISA.CUKCUK.API", "MISA.CUKCUK.API.csproj", "{7572C6B5-E0FA-4265-A9AB-3831F28B2E0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MISA.EMIS.API", "MISA.EMIS.API.csproj", "{7572C6B5-E0FA-4265-A9AB-3831F28B2E0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MISA.Core", "..\MISA.Core\MISA.Core.csproj", "{F8FBFF64-A06C-4929-8387-4FEDA724AB99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MISA.Core", "..\MISA.Core\MISA.Core.csproj", "{F8FBFF64-A06C-4929-8387-4FEDA724AB99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MISA.Instructure", "..\MISA.Instructure\MISA.Instructure.csproj", "{4EC886EE-A5BE-43F0-8118-961AE5A2D2F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MISA.Instructure", "..\MISA.Instructure\MISA.Instructure.csproj", "{4EC886EE-A5BE-43F0-8118-961AE5A2D2F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

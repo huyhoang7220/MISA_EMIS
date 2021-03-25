@@ -82,15 +82,15 @@
                             :class="{'selected-line':false}"></div>
                         </td>
                         <td colspan="1">{{fee.feeName}}</td>
-                        <td colspan="1">Đồng phục</td>
-                        <td colspan="1" class="align-right-text">40.000đ/tháng</td>
-                        <td colspan="1" class="td-to-check"></td>
-                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
-                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
-                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
-                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
-                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
-                        <td colspan="1" class="td-to-check"><div class="cell-checking"></div></td>
+                        <td colspan="1">{{fee.feeGroupName}}</td>
+                        <td colspan="1" class="align-right-text">{{fee.amountOfFee}}đ</td>
+                        <td colspan="1" class="td-to-check">{{fee.turnFee}}</td>
+                        <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.discount}"></div></td>
+                        <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.allowExportBill}"></div></td>
+                        <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.allowExportLicense}"></div></td>
+                        <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.allowReturn}"></div></td>
+                        <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.feeRequired}"></div></td>
+                        <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.follow}"></div></td>
                         <td colspan="1">
                             <div class="last-cell">
                                 <div class="btn-edit"></div>
@@ -346,6 +346,7 @@ export default {
         height: 24px;
         background-position: center;
         background-size: contain;
+        cursor: pointer;
     }
     .btn-edit{
         background-image: url('../../assets/image/ic_Edit.svg');

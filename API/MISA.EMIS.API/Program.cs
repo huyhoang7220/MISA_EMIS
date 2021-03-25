@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MISA.CUKCUK.API
+namespace MISA.EMIS.API
 {
     public class Program
     {

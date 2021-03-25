@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MISA.Core.Entities;
-namespace MISA.CUKCUK.API.API
+namespace MISA.EMIS.API.API
 {
     [Route("api/v1/[controller]")]
     [ApiController]

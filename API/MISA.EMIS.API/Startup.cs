@@ -15,7 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MISA.Instructure.DataAccess;
 
-namespace MISA.CUKCUK.API
+namespace MISA.EMIS.API
 {
     public class Startup
     {
@@ -33,16 +33,13 @@ namespace MISA.CUKCUK.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MISA.CUKCUK.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MISA.EMIS.API", Version = "v1" });
             });
 
             services.AddScoped<IBaseService, BaseService>();
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IBaseRepository, BaseRepository>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
+            services.AddScoped<IFeeRepository, FeeRepository>();
+            services.AddScoped<IFeeService, FeeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

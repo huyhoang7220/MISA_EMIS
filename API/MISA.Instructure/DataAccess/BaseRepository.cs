@@ -15,7 +15,7 @@ namespace MISA.Instructure.DataAccess
         /// <summary>
         /// Created by : VXKHANH (21/3/2021)
         /// </summary>
-        protected string connectionString = "User Id=dev;Host=47.241.69.179;Character Set=utf8; Database=MF761_VXKHANH_CukCuk; Password=12345678; Port=3306";
+        protected string connectionString = "User Id=dev;Host=47.241.69.179;Character Set=utf8; Database=MF761_VXKHANH_EMIS; Password=12345678; Port=3306";
         protected IDbConnection dbConnection;
 
         /// <summary>

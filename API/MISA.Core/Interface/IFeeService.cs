@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MISA.Core.Interface
 {
-    interface ICutomerGroupService:IBaseService
+    public interface IFeeService:IBaseService
     {
 
     }
