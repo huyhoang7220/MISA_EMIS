@@ -18,7 +18,7 @@
                         <select v-model="NewFee.feeGroupId">
                             <option v-for="feeGroup in NewFeeGroup" 
                             :key="feeGroup.feeGroupId"
-                            :value="feeGroup.feeGroupId">
+                            v-bind:value="feeGroup.feeGroupId">
                                 {{feeGroup.feeGroupName}}
                             </option>
                         </select>
@@ -66,24 +66,24 @@
                     <div class="radio-row">
                         <!-- <form action=""> -->
                             <div class="radio-button">
-                                <input type="radio" name="term" checked>
+                                <input type="radio" name="term" v-model="NewFee.turnFee" value="0">
                                 <label for=""></label>
                                 <div class="radio-text">Tháng</div>
                             </div>
-                             <div class="radio-button">
-                                <input type="radio" name="term" >
+                             <div class="radio-button" >
+                                <input type="radio" name="term" v-model="NewFee.turnFee" value="1">
                                 <label for=""></label>
                                 <div class="radio-text">Quý</div>
                             </div>
 
                              <div class="radio-button">
-                                <input type="radio" name="term" >
+                                <input type="radio" name="term" v-model="NewFee.turnFee" value="2">
                                 <label for=""></label>
                                 <div class="radio-text">Học kỳ</div>
                             </div>
                             
                              <div class="radio-button">
-                                <input type="radio" name="term" >
+                                <input type="radio" name="term" v-model="NewFee.turnFee"  value="3">
                                 <label for=""></label>
                                 <div class="radio-text">Năm học</div>
                             </div>
@@ -149,7 +149,7 @@
             <div class="form-footer">
                 <div class="f-footer-left">
                     <div class="row-check non-margin">
-                        <input type="checkbox">
+                        <input type="checkbox" v-model="NewFee.follow">
                         <label></label>
                         <div class="col-row-text">
                             Ngừng theo dõi
@@ -168,7 +168,6 @@
             </div>
             <div class="btn-close-form"
                 @click="CloseForm()">
-
             </div>
         </div>
         <div class="blur">
@@ -185,18 +184,18 @@ export default {
     props:{
         focusOn: Boolean,
         Fee:{},
-        FeeGroup:{}
+        FeeGroups:{}
     },
     data() {
         return {
             NewFee: {
-                feeId: '',
+                feeId: null,
                 feeName: '',
-                feeGroupId: '',
-                feeRangeId: '',
-                unitFeeId: '',
+                feeGroupId: null,
+                feeRangeId: null,
+                unitFeeId: null,
                 turnFee: '',
-                amountOfFee: 220000,
+                amountOfFee: null,
                 discount: false,
                 allowExportBill: false,
                 allowExportLicense: false,
@@ -206,17 +205,13 @@ export default {
                 typeRegistion: false,
                 follow: false,
                 feeGroupName: '',
+                quality:'',
                 createdBy: null,
-                createdDate: '',
-                modifiedDate: ''
+                createdDate: null,
+                modifiedDate: null
             },
             NewFeeGroup: {
-                feeGroupId: '',
-                feeGroupName: '',
-                parentId: '',
-                createdBy: '',
-                createdDate: '',
-                modifiedDate: '',
+                
             },
             UnitFee: {},
         }
@@ -224,7 +219,8 @@ export default {
     beforeUpdate(){
          this.$nextTick(()=>{
             this.NewFee = this.Fee
-            this.NewFeeGroup = {...this.FeeGroup}
+            this.NewFeeGroup = this.FeeGroups
+            console.log(this.FeeGroups)
         })
     },
     components:{
@@ -236,8 +232,8 @@ export default {
         CloseForm: function(){
             this.$emit('CloseForm');
     },
-    async created() {
-        
+    created() {
+
     },
 },
 }

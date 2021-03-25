@@ -10,6 +10,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using static MISA.Core.Entities.CreatedInfor;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MISA.Core.Service
 {

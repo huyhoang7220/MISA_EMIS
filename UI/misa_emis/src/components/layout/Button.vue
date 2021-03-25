@@ -1,5 +1,7 @@
 <template>
-        <div class="button" :class="{'second-button':second}" :style="pathImage">
+        <div class="button" 
+        :class="{'second-button':second, 'minwidth':minwidth}" 
+        :style="pathImage">
             {{Text}}
         </div>
 </template>
@@ -7,7 +9,7 @@
 <script>
 
 export default {
-    props:['Text','second','image'],
+    props:['Text','second','image','minwidth'],
     data() {
         return {
             primaryBtn: 'button',
@@ -15,7 +17,6 @@ export default {
         }
     },
     created() {
-        console.log(this.Text, this.second);
     },
 }
 </script>
@@ -60,5 +61,8 @@ export default {
         background-color: #e0e0e0;
         color: #a6a6a6;
         cursor: not-allowed;
+    }
+    .minwidth{
+        min-width: 80px;
     }
 </style>

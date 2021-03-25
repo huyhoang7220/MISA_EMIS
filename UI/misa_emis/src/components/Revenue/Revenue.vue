@@ -111,8 +111,9 @@
         <Detail v-show="show" @CloseForm="CloseForm()" 
         :focusOn="focusOn" 
         :Fee="Fee" ref="detail"
-        :FeeGroup="FeeGroup"
+        :FeeGroups="FeeGroups"
         />
+        <DeletePopup v-show="true"/>
     </div>
 </template>
 
@@ -120,6 +121,7 @@
 import axios from 'axios'
 import NewButton from '../layout/Button.vue'
 import Detail from './RevenueDetail.vue'
+import DeletePopup from '../popup/DeletePopup.vue'
 export default {
     data() {
         return {
@@ -150,12 +152,20 @@ export default {
                 createdDate: '',
                 modifiedDate: ''
             },
-            FeeGroup: {},
+            FeeGroups:{
+                feeGroupId: "",
+                feeGroupName: "",
+                parentId: null,
+                createdBy: "",
+                createdDate: null,
+                modifiedDate: null,
+            }
         }
     },
     components:{
         NewButton,
         Detail,
+        DeletePopup,
     },
     watch:{
         focusOn:function(){
@@ -191,8 +201,8 @@ export default {
     async created() {
         const res = await axios.get('https://localhost:44341/api/v1/fee');
         this.Fees = res.data
-        var responsive = await axios.get('https://localhost:44341/api/v1/FeeGroup');
-        this.FeeGroup = responsive.data;
+        const res_sub = await axios.get('https://localhost:44341/api/v1/FeeGroup')
+        this.FeeGroups = res_sub.data
     },
 }
 </script>
@@ -265,8 +275,8 @@ export default {
         width: 32px;
         height: 32px;
         border-radius: 4px;
-        border: 1px solid #0FA655;
-        background-image: url('../../assets/image/ic_Remove2.svg');
+        /* border: 1px solid #CCCCCC; */
+        background-image: url('../../assets/image/ic_Delete_32.svg');
         margin-left: 8px;
         margin-right: 16px;
     }

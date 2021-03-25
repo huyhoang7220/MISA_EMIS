@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace MISA.Core.Entities
@@ -21,6 +22,7 @@ namespace MISA.Core.Entities
         /// </summary>
         [Required]
         [Duplicate]
+        [DisplayName("Tên khoản thu")]
         public string FeeName { get; set; }
 
         /// <summary>
@@ -32,25 +34,29 @@ namespace MISA.Core.Entities
         /// Khóa ngoại mức khoản thu
         /// </summary>
         [Required]
-        public Guid FeeRangeId { get; set; }
+        [DisplayName("Phạm vi khoản thu")]
+        public Guid? FeeRangeId { get; set; }
 
         /// <summary>
         /// Khóa ngoại đơn vị 
         /// </summary>
         [Required]
+        [DisplayName("Đơn vị khoản thu")]
         public Guid? UnitFeeId { get; set; }
 
         /// <summary>
         /// Kỳ thu 
         /// </summary>
         [Required]
+        [DisplayName("Kỳ thu")]
         public string TurnFee { get; set; }
 
         /// <summary>
         /// Mức thu 
         /// </summary>
         [Required]
-        public double AmountOfFee { get; set; }
+        [DisplayName("Mức khoản thu")]
+        public double? AmountOfFee { get; set; }
 
         /// <summary>
         /// Áp dụng miễn giảm
@@ -96,6 +102,11 @@ namespace MISA.Core.Entities
         /// Tên nhóm khoản thu
         /// </summary>
         public string FeeGroupName { get; set; }
+
+        /// <summary>
+        /// Tính chất của khoản thu
+        /// </summary>
+        public string Quality { get; set; }
         #endregion
     }
 
