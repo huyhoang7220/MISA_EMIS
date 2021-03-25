@@ -8,13 +8,19 @@
                 <div class="form-left">
                     <!-- Tên khoản thu -->
                     <Label :text="'Tên khoản thu *'"/>
-                    <Textbox  :margin="true" :focus="focus"/>
+                    <div class="input">
+                        <input type="text" ref="feeName" class="textbox margin-r-16" v-model="NewFee.feeName">
+                    </div>
 
                     <!-- Nhóm khoản thu -->
                     <Label :text="'Thuộc nhóm khoản thu'"/>
                     <div class="form-left-row">
-                        <select>
-                            <option value="1">Học phí</option>
+                        <select v-model="NewFee.feeGroupId">
+                            <option v-for="feeGroup in NewFeeGroup" 
+                            :key="feeGroup.feeGroupId"
+                            :value="feeGroup.feeGroupId">
+                                {{feeGroup.feeGroupName}}
+                            </option>
                         </select>
                         <div class="btn-plus"></div>
                     </div>
@@ -25,13 +31,15 @@
                             <Label :text="'Mức thu *'"/>
                             <div class="mount-row-2">
                                 <!-- <input type="text" class="radius"> -->
-                                <Textbox/>
+                                 <div class="input">
+                                    <input type="text" class="textbox" v-model="NewFee.amountOfFee">
+                                </div>
                                 <div class="unit-text">đ/</div>
                             </div>
                         </div>
                         <div class="unit">
                             <Label :text="'Đơn vị *'"/>
-                            <select class="radius">
+                            <select class="radius" >
                                 <option value="1"></option>
                             </select>
                         </div>
@@ -40,7 +48,7 @@
                     <!-- Phạm vi thu -->
                     <Label :text="'Phạm vi thu *'"/>
                     <div class="form-left-row ">
-                        <select class="mar-r-16px radius">
+                        <select class="mar-r-16px radius" v-model="NewFee.feeRangeId">
                             <option value="1">Toàn trường</option>
                         </select>
                     </div>
@@ -85,28 +93,28 @@
                 <div class="form-right">
                     <div class="form-r-col">
                         <div class="row-check">
-                            <input type="checkbox">
+                            <input type="checkbox" v-model="NewFee.discount">
                             <label></label>
                             <div class="col-row-text">
                                 Áp dụng miễn giảm
                             </div>
                         </div>
                         <div class="row-check">
-                            <input type="checkbox">
+                            <input type="checkbox" v-model="NewFee.feeRequired">
                             <label></label>
                             <div class="col-row-text">
                                 Khoản thu bắt buộc
                             </div>
                         </div>
                         <div class="row-check">
-                            <input type="checkbox">
+                            <input type="checkbox" v-model="NewFee.allowExportBill">
                             <label></label>
                             <div class="col-row-text">
                                 Cho phép xuất hóa đơn
                             </div>
                         </div>
                         <div class="row-check">
-                            <input type="checkbox" class="switch-btn">
+                            <input type="checkbox" class="switch-btn" v-model="NewFee.typeRegistion">
                             <label></label>
                             <div class="col-row-text">
                                 Phân loại đăng ký
@@ -115,21 +123,21 @@
                     </div>
                     <div class="form-r-col">
                          <div class="row-check">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" checked v-model="NewFee.allowExportLicense">
                             <label></label>
                             <div class="col-row-text">
                                 Cho phép xuất chứng từ
                             </div>
                         </div>
                         <div class="row-check">
-                            <input type="checkbox">
+                            <input type="checkbox" v-model="NewFee.allowReturn">
                             <label></label>
                             <div class="col-row-text">
                                 Cho phép hoàn trả
                             </div>
                         </div>
                         <div class="row-check">
-                            <input type="checkbox">
+                            <input type="checkbox" v-model="NewFee.feePrivate">
                             <label></label>
                             <div class="col-row-text">
                                 Thu nội bộ
@@ -169,27 +177,68 @@
     </div>
 </template>
 <script>
-import Textbox from '../layout/Textbox.vue'
+// import Textbox from '../layout/Textbox.vue'
 import Label from '../layout/Label.vue'
 import Button from '../layout/Button.vue'
+// import axios from 'axios'
 export default {
     props:{
-        focus: Boolean
+        focusOn: Boolean,
+        Fee:{},
+        FeeGroup:{}
     },
     data() {
         return {
-
+            NewFee: {
+                feeId: '',
+                feeName: '',
+                feeGroupId: '',
+                feeRangeId: '',
+                unitFeeId: '',
+                turnFee: '',
+                amountOfFee: 220000,
+                discount: false,
+                allowExportBill: false,
+                allowExportLicense: false,
+                feeRequired: false,
+                allowReturn: false,
+                feePrivate: false,
+                typeRegistion: false,
+                follow: false,
+                feeGroupName: '',
+                createdBy: null,
+                createdDate: '',
+                modifiedDate: ''
+            },
+            NewFeeGroup: {
+                feeGroupId: '',
+                feeGroupName: '',
+                parentId: '',
+                createdBy: '',
+                createdDate: '',
+                modifiedDate: '',
+            },
+            UnitFee: {},
         }
     },
+    beforeUpdate(){
+         this.$nextTick(()=>{
+            this.NewFee = this.Fee
+            this.NewFeeGroup = {...this.FeeGroup}
+        })
+    },
     components:{
-        Textbox,
+        // Textbox,
         Label,
         Button
     },
     methods:{
         CloseForm: function(){
             this.$emit('CloseForm');
-        }
+    },
+    async created() {
+        
+    },
 },
 }
 </script>
@@ -255,6 +304,9 @@ export default {
         flex-grow: 1;
         flex-shrink: 1;
         flex-basis: 0%;
+    }
+    select:focus{
+         border: 1px solid #00d469;
     }
     .btn-plus{
         height: 30px;
@@ -442,5 +494,28 @@ export default {
         background-size: contain;
         background-repeat: no-repeat;
         cursor: pointer;
+    }
+    .input{
+        width: 100%;
+        display: flex;
+    }
+    .textbox{
+        font-family: OpenSan-Regular;
+        height: 32px;
+        box-sizing: border-box;
+        background-color: #ffffff;
+        border: 1px solid #CCCCCC;
+        border-radius: 4px;
+        padding: 0px 12px;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0%;
+    }
+    .textbox:focus{
+        outline: none;
+        border: 1px solid #00d469;
+    }
+    .margin-r-16{
+        margin-right: 16px;
     }
 </style>

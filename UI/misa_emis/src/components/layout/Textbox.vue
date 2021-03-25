@@ -11,6 +11,12 @@ export default {
         placeHolder: String,
         focus: Boolean,
         margin: Boolean,
+        text: String
+    },
+    data(){
+        return{
+              ntext : this.text
+        } 
     },
     watch:{
         focus:function(){

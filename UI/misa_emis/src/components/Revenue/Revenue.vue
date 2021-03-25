@@ -93,7 +93,7 @@
                         <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.follow}"></div></td>
                         <td colspan="1">
                             <div class="last-cell">
-                                <div class="btn-edit"></div>
+                                <div class="btn-edit" @click="RowEdit(fee)"></div>
                                 <div class="btn-copy"></div>
                                 <div class="btn-delete"></div>
                             </div>
@@ -108,7 +108,11 @@
                 </div>
             </div>
         </div>
-        <Detail v-show="show" @CloseForm="CloseForm()" :focus="focus"/>
+        <Detail v-show="show" @CloseForm="CloseForm()" 
+        :focusOn="focusOn" 
+        :Fee="Fee" ref="detail"
+        :FeeGroup="FeeGroup"
+        />
     </div>
 </template>
 
@@ -123,13 +127,42 @@ export default {
             second: false,
             selectedCheck: false,
             show: false,
-            focus: false,
-            Fees:{}
+            focusOn: false,
+            Fees:{},
+            Fee:{
+                feeId: '',
+                feeName: '',
+                feeGroupId: '',
+                feeRangeId: '',
+                unitFeeId: '',
+                turnFee: '',
+                amountOfFee: 220000,
+                discount: false,
+                allowExportBill: false,
+                allowExportLicense: false,
+                feeRequired: false,
+                allowReturn: false,
+                feePrivate: false,
+                typeRegistion: false,
+                follow: false,
+                feeGroupName: '',
+                createdBy: null,
+                createdDate: '',
+                modifiedDate: ''
+            },
+            FeeGroup: {},
         }
     },
     components:{
         NewButton,
         Detail,
+    },
+    watch:{
+        focusOn:function(){
+            this.$nextTick(()=>{
+                this.$refs.detail.$refs.feeName.focus();
+            })
+        }
     },
     methods:{
         check: function(){
@@ -137,15 +170,29 @@ export default {
         }
         ,OpenForm: function(){
             this.show = true;
-            this.focus = !this.focus
+            this.Fee = {}
+            this.focusOn = true
         },
         CloseForm:function(){
             this.show = false;
+            this.focusOn=false;
+            this.Fee = {}
+        },
+        RowEdit: function(Fee){
+            this.show = true;
+            this.focusOn = true
+            this.Fee = {...Fee}
+        },
+        LoadData:function(){
+            var newres = axios.get('https://localhost:44341/api/v1/fee');
+            this.Fees = newres.data
         }
     },
     async created() {
         const res = await axios.get('https://localhost:44341/api/v1/fee');
         this.Fees = res.data
+        var responsive = await axios.get('https://localhost:44341/api/v1/FeeGroup');
+        this.FeeGroup = responsive.data;
     },
 }
 </script>
