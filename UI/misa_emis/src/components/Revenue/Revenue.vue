@@ -22,7 +22,7 @@
             <div class="filter-line">
                 <div class="filter-left">
                     <div class="select-line" 
-                    @click="check()"
+                    @click="LoadFeeStopFollow()"
                     :class="{'selected-line':selectedCheck}"></div>
                     <label for="">Hiển thị khoản thu ngừng theo dõi</label>
                 </div>
@@ -48,15 +48,15 @@
                         <th colspan="1"> </th>
                         <th colspan="1" class="col-name-revenue">
                             <div class="th-text">Tên khoản thu</div>
-                            <div class="btn-filter"><input type="text" id=""></div>
+                            <div class="btn-filter"><input type="text"></div>
                         </th>
                         <th colspan="1" class="col-group-revenue">
                             <div class="th-text">Nhóm khoản thu</div>
-                            <div class="btn-filter"><input type="text" id=""></div>
+                            <div class="btn-filter"><input type="text"></div>
                         </th>
                         <th colspan="1" class="col-mount-revenue">
                             <div class="th-text">Mức thu</div>
-                            <div class="btn-filter"><input type="text" id=""></div>
+                            <div class="btn-filter"><input type="text"></div>
                         </th>
                         <th colspan="1">
                             <div class="th-text">Kỳ thu</div>
@@ -95,7 +95,7 @@
                             <div class="last-cell">
                                 <div class="btn-edit" @click="RowEdit(fee)"></div>
                                 <div class="btn-copy"></div>
-                                <div class="btn-delete"></div>
+                                <div class="btn-delete" @click="DeletePopup(fee.feeId)"></div>
                             </div>
                         </td>
                     </tr>
@@ -111,9 +111,22 @@
         <Detail v-show="show" @CloseForm="CloseForm()" 
         :focusOn="focusOn" 
         :Fee="Fee" ref="detail"
-        :FeeGroups="FeeGroups"
+        :feeGroups="feeGroups"
+        :feeRanges="feeRanges"
+        :unitFees="unitFees"
         />
-        <DeletePopup v-show="true"/>
+        <DeletePopup 
+        v-show="popup.deleteOne" 
+        :text="'Bạn có chắc muốn xóa khoản thu đã chọn?'"
+        :secondbtn="true"
+        @DeleteCancel="DeleteCancel()"
+        @DeleteOne="DeleteOne"
+        :FeeId="FeeId"/>
+        <DeletePopup 
+        v-show="popup.deleteMulti"
+        :text="'Bạn có chắc muốn xóa những khoản thu đã chọn?'"
+        :secondbtn="true"
+        @DeleteCancel="DeleteCancel()"/>
     </div>
 </template>
 
@@ -131,6 +144,11 @@ export default {
             show: false,
             focusOn: false,
             Fees:{},
+            popup:{
+                deleteOne: false,
+                deleteMulti: false,
+                deleteFail: false
+            },
             Fee:{
                 feeId: '',
                 feeName: '',
@@ -152,14 +170,13 @@ export default {
                 createdDate: '',
                 modifiedDate: ''
             },
-            FeeGroups:{
-                feeGroupId: "",
-                feeGroupName: "",
-                parentId: null,
-                createdBy: "",
-                createdDate: null,
-                modifiedDate: null,
-            }
+            FeeId: '',
+            FeeGroups:{},
+            feeGroups:{},
+            UnitFees:{},
+            unitFees:{},
+            FeeRanges:{},
+            feeRanges:{}
         }
     },
     components:{
@@ -168,6 +185,10 @@ export default {
         DeletePopup,
     },
     watch:{
+        /**
+         * hàm theo dõi sự thay đổi  của biến focus 
+         * Nếu biến này thay đổi thì Thực hiện focus đến ô Tên khoản thu
+         */
         focusOn:function(){
             this.$nextTick(()=>{
                 this.$refs.detail.$refs.feeName.focus();
@@ -175,27 +196,84 @@ export default {
         }
     },
     methods:{
-        check: function(){
-            this.selectedCheck =! this.selectedCheck;
-        }
-        ,OpenForm: function(){
+        /**
+         * Hàm laod khoản thu ngừng theo dõi
+         */
+        LoadFeeStopFollow:function(){
+            this.selectedCheck = !this.selectedCheck;
+            if(this.selectedCheck == true){
+                    var stopFollow = axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((result) =>{return result.data})
+                    this.Fees = stopFollow;
+            }
+            else{
+                this.LoadData();
+            }
+        },
+        /**
+         * Hàm mở form để thêm khoản thu mới
+         */
+        OpenForm: function(){
             this.show = true;
             this.Fee = {}
             this.focusOn = true
+            setTimeout(()=>{
+                this.Fee = {}
+                this.feeGroups = {...this.FeeGroups},
+                this.unitFees = {...this.UnitFees},
+                this.feeRanges = {...this.FeeRanges}
+            },0)
         },
+        /**
+         * Hàm đóng form thêm, sửa 
+         */
         CloseForm:function(){
             this.show = false;
-            this.focusOn=false;
+            this.focusOn = false;
             this.Fee = {}
         },
+        /**
+         * Hàm mở form để chỉnh sửa thông tin khoản thu
+         * Dữ liệu được tải tự động lên form
+         */
         RowEdit: function(Fee){
             this.show = true;
             this.focusOn = true
-            this.Fee = {...Fee}
+            setTimeout(()=>{
+                this.Fee = {...Fee}
+                this.feeGroups = {...this.FeeGroups},
+                this.unitFees = {...this.UnitFees},
+                this.feeRanges = {...this.FeeRanges}
+            },0)
+            
         },
+        DeletePopup(FeeId){
+            this.popup.deleteOne = true;
+            this.FeeId = FeeId;
+        },
+
+        DeleteCancel:function(){
+            this.popup.deleteOne = false;
+            this.popup.deleteMulti = false;
+            this.popup.deleteFail = false;
+            this.FeeId = '';
+        },
+        /**
+         * Hàm xóa 1 dòng dữ liệu
+         * và đóng thông báo
+         */
+        DeleteOne:function(FeeId){
+            var rowaffect = axios.delete('https://localhost:44341/api/v1/Fee/'+FeeId)
+            console.log(rowaffect);
+            this.popup = false
+            this.FeeId = '';
+            this.LoadData();
+        },
+        /**
+         * Hàm laod lại dữ liệu khi có thay đổi
+         */
         LoadData:function(){
-            var newres = axios.get('https://localhost:44341/api/v1/fee');
-            this.Fees = newres.data
+            var newres = axios.get('https://localhost:44341/api/v1/fee').then((res)=>{return res.data});
+            this.Fees = newres;
         }
     },
     async created() {
@@ -203,227 +281,15 @@ export default {
         this.Fees = res.data
         const res_sub = await axios.get('https://localhost:44341/api/v1/FeeGroup')
         this.FeeGroups = res_sub.data
+        const unit = await axios.get('https://localhost:44341/api/v1/UnitFee')
+        this.UnitFees = unit.data
+        const range = await axios.get('https://localhost:44341/api/v1/FeeRange')
+        this.FeeRanges = range.data
+        console.log(this.Fees);
     },
 }
 </script>
 
 <style lang="css">
-    .revenue{
-        background: #EAECEF;
-        width: 100%;
-        height: calc(100vh - 46px);
-    }
-    .category{
-        height: 40px;
-        display: flex;
-        background-color: #E0E0E0;
-    }
-    .category-item{
-        padding: 0px 24px;
-        line-height: 40px;
-        font-size: 13px;
-        color: #A6A6A6;
-        position: relative;
-        text-align: center;
-        font-family: OpenSan-Semibold;
-    }
-    .category-item-active{
-        background-color: #FFFFFF !important;
-        color: #000000;
-    }
-    .category hr{
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        background-color: #009253;
-        top: 0px;
-        left: 0px;
-        margin: 0px;
-        padding: 0px;
-        border: 0px;
-        display: none;
-    }
-    .active-hr{
-        display: block !important;
-    }
-    .grid{
-        height: calc(100% - 40px);
-        width: 100%;
-        background-color: #FFFFFF;
-    }
-    label{
-        font-size: 13px;
-    }
-    .filter-line{
-        height: 46px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .filter-left{
-        margin-left: 16px;
-        display: flex;
-
-    }
-    .filter-left label{
-        margin-left: 10px;
-    }
-    .filter-right{
-        display: flex;
-    }
-    .trash-btn{
-        width: 32px;
-        height: 32px;
-        border-radius: 4px;
-        /* border: 1px solid #CCCCCC; */
-        background-image: url('../../assets/image/ic_Delete_32.svg');
-        margin-left: 8px;
-        margin-right: 16px;
-    }
-    .grid-list{
-        padding-left: 16px;
-        padding-right: 16px;
-        width: calc(100% - 32px);
-        height: calc(100% - 106px);
-    }
-    .th-text{
-        line-height: 24px;
-        margin-bottom: 12px;
-        white-space: nowrap;
-    }
-
-    .outline-table{
-        border-collapse: collapse;
-        overflow: auto;
-        width: 100%;
-        height: 100%;
-        border: 1px solid #D5D8E6;
-        padding-right: -1px;
-        z-index: 20;
-    }
-    .grid-list table{
-        border: 0px;
-        width: 100%;
-        border-collapse: collapse;
-        margin: 0px;
-    }
-    .grid-list table tr{
-        width: fit-content;
-    }
-    .grid-list table tr:nth-child(odd){
-        background-color:#e5f3ff;
-    }
-    .grid-list table tr th{
-        padding: 8px 8px;
-        font-size: 13px;
-        font-family: OpenSan-Semibold;
-        border: 1px solid#D5D8E6;
-        text-align: center;
-        background-color:#f5f6fa;
-    }
-    .td-to-check{
-        min-width: 60px;
-    }
-    .btn-filter{
-        width: 100%;
-        display: flex;
-    }
-    .btn-filter input{
-        width: 100%;
-        background-image: url('../../assets/image/ic_Filter.svg');
-        background-position: 0px;
-        background-repeat: no-repeat;
-        padding-left: 24px;
-        border: 1px solid  #D5D8E6;
-        height: 20px;
-    }
-    .btn-filter select{
-        width: 100%;
-        height: 20px;
-        border: 1px solid  #D5D8E6;
-    }
-    .btn-filter input,select:focus{
-        outline: none;
-    }
-    .grid-list table tr td{
-        height: 32px;
-        line-height: 32px;
-        border: 1px solid  #D5D8E6;
-        font-size: 13px;
-        font-family: OpenSan-Regular;
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-    .grid-list table tr td:first-child{
-        max-width: 36px !important;
-    }
-    .line-forcus{
-        background-color: #cce8ff;
-    }
-    .select-line{
-        width: 16px;
-        height: 16px;
-        margin: auto;
-        background-image: url('../../assets/image/ic_Checkbox_Inactive.svg');
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-    .selected-line{
-        background-image: url('../../assets/image/ic_Checkbox_Active.svg') !important;
-
-    }
-    .cell-checking{
-        width: 100%;
-        height: 20px;
-        background-image: url('../../assets/image/ic_Check.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-    }
-    .footer{
-        height: 60px;
-        width: 100%;
-        padding: 10px 16px;
-        box-sizing: border-box;
-    }
-    .result{
-        font-size: 13px;
-        font-display: OpenSan-Regular;
-    }
-    .count{
-        font-family: OpenSan-bold;
-    }
-    .last-cell{
-        display: flex;
-        align-items: center;
-    }
-    .btn-edit, .btn-copy, .btn-delete{
-        width: 24px;
-        height: 24px;
-        background-position: center;
-        background-size: contain;
-        cursor: pointer;
-    }
-    .btn-edit{
-        background-image: url('../../assets/image/ic_Edit.svg');
-    }
-    .btn-copy{
-        background-image: url('../../assets/image/ic_Duplicate_24.svg');
-    }
-    .btn-delete{
-        background-image: url('../../assets/image/ic_Remove2.svg');
-    }
-    .align-right-text{
-        text-align: right !important;
-    }
-    .col-name-revenue{
-        min-width: 350px;
-    }
-    .col-group-revenue{
-        min-width: 200px;
-    }
-    .col-mount-revenue{
-        min-width: 200px;
-    }
+    @import '../../css/dictionary/revenue/revenue.css';
 </style>

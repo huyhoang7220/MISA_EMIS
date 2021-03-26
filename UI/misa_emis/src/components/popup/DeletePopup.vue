@@ -2,13 +2,13 @@
     <div class="popup">
         <div class="popup-content">
             <div class="popup-title">Thông báo</div>
-            <div class="popup-message">Bạn có chắc muốn xóa những khoản thu đã chọn?</div>
+            <div class="popup-message">{{text}}</div>
             <div class="popup-btn">
-                <Button :Text="'Đóng'" :second="true" :minwidth="true"/>
-                <Button :Text="'Xóa'" :second="false" :minwidth="true"/>
+                <Button :Text="'Không'" :second="true" v-if="secondbtn" :minwidth="true" @click="DeleteCancel()"/>
+                <Button :Text="'Xóa'" :second="false" :minwidth="true" @click="DeleteOne()"/>
             </div>
             <div class="btn-close-form"
-                @click="CloseForm()">
+                @click="DeleteCancel()">
             </div>
         </div>
         <div class="blur"></div>
@@ -18,8 +18,21 @@
 <script>
 import Button from '../layout/Button.vue'
 export default {
+    props:{
+        secondbtn:Boolean,
+        text:String,
+        FeeId: String
+    },
     components:{
-        Button
+        Button,
+    },
+    methods:{
+        DeleteCancel:function(){
+            this.$emit('DeleteCancel');
+        },
+        DeleteOne:function(){
+            this.$emit('DeleteOne',this.FeeId)
+        }
     }
 }
 </script>
@@ -62,6 +75,7 @@ export default {
     .popup-btn{
         display: flex;
         justify-content: flex-end;
+        align-content: center;
     }
     .btn-close-form{
         position: absolute;

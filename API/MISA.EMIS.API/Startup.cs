@@ -42,6 +42,10 @@ namespace MISA.EMIS.API
             services.AddScoped<IFeeService, FeeService>();
             services.AddScoped<IFeeGroupService, FeeGroupService>();
             services.AddScoped<IFeeGroupRepository, FeeGroupRepository>();
+            services.AddScoped<IFeeRangeService, FeeRangeService>();
+            services.AddScoped<IFeeRangeRepository, FeeRangeRepository>();
+            services.AddScoped<IUnitFeeService, UnitFeeService>();
+            services.AddScoped<IUnitFeeRepository, UnitFeeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

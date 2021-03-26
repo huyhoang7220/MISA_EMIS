@@ -150,6 +150,9 @@
   <data name="InsertSuccess" xml:space="preserve">
     <value>Đã thêm mới bản ghi.</value>
   </data>
+  <data name="NotAllowDeleteThisData" xml:space="preserve">
+    <value>Không được phét xóa dữ liệu này!</value>
+  </data>
   <data name="RequiredValue" xml:space="preserve">
     <value> không được để trống!</value>
   </data>

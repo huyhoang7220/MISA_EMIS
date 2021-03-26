@@ -138,7 +138,7 @@ namespace MISA.Core.Service
         /// <typeparam name="entity">Class</typeparam>
         /// <param name="Id">Id của bản ghi</param>
         /// <returns>Số dòng bị ảnh hưởng</returns>
-        public ServiceResult DeleteObject<entity>(Guid Id)
+        public virtual ServiceResult DeleteObject<entity>(Guid Id)
         {
             var rowAffect = baseRepository.DeleteObject<entity>(Id);
             if (rowAffect <= 0)

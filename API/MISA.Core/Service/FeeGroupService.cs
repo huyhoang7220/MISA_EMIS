@@ -5,6 +5,10 @@ using System.Text;
 
 namespace MISA.Core.Service
 {
+    /// <summary>
+    /// Created by: VXKHANH(26/3/2021)
+    /// Service cho nhóm khoản thu
+    /// </summary>
     public class FeeGroupService:BaseService, IFeeGroupService
     {
         IFeeGroupRepository feeGroupRepository;
