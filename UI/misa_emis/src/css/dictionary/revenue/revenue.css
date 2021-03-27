@@ -92,14 +92,17 @@ label{
     width: 100%;
     height: 100%;
     border: 1px solid #D5D8E6;
-    padding-right: -1px;
+    padding: -1px;
     z-index: 20;
+    position: relative;
 }
 .grid-list table{
     border: 0px;
+    /* width: calc(100% + 2px); */
     width: 100%;
     border-collapse: collapse;
     margin: 0px;
+
 }
 .grid-list table tr{
     width: fit-content;
@@ -114,6 +117,8 @@ label{
     border: 1px solid#D5D8E6;
     text-align: center;
     background-color:#f5f6fa;
+    position: sticky;
+    top: 0px;
 }
 .td-to-check{
     min-width: 60px;

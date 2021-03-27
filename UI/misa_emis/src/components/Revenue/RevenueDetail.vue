@@ -2,12 +2,12 @@
     <div class="popup">
         <div class="form">
             <div class="form-title">
-                Thêm khoản thu
+                {{Title}}
             </div>
             <div class="form-content">
                 <div class="form-left">
                     <!-- Tên khoản thu -->
-                    <Label :text="'Tên khoản thu *'"/>
+                    <Label :text="'Tên khoản thu '" :required="true"/>
                     <div class="input">
                         <input type="text" ref="feeName" class="textbox margin-r-16" v-model="NewFee.feeName">
                     </div>
@@ -28,7 +28,7 @@
                     <!-- Mức thu -->
                     <div class="form-left-row3">
                         <div class="mount">
-                            <Label :text="'Mức thu *'"/>
+                            <Label :text="'Mức thu '" :required="true"/>
                             <div class="mount-row-2">
                                 <!-- <input type="text" class="radius"> -->
                                  <div class="input">
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="unit">
-                            <Label :text="'Đơn vị *'"/>
+                            <Label :text="'Đơn vị '" :required="true"/>
                             <select class="radius" v-model="NewFee.unitFeeId">
                                 <option v-for="unitFee in unitFees"
                                 :key="unitFee.unitFeeId"
@@ -50,7 +50,7 @@
                     </div>
 
                     <!-- Phạm vi thu -->
-                    <Label :text="'Phạm vi thu *'"/>
+                    <Label :text="'Phạm vi thu '" :required="true"/>
                     <div class="form-left-row ">
                         <select class="mar-r-16px radius" v-model="NewFee.feeRangeId">
                             <option v-for="feeRange in feeRanges" 
@@ -68,7 +68,7 @@
                     </div>
 
                     <!-- Kỳ thu -->
-                    <Label :text="'Kỳ thu *'"/>
+                    <Label :text="'Kỳ thu '" :required="true"/>
                     <div class="radio-row">
                         <!-- <form action=""> -->
                             <div class="radio-button">
@@ -154,7 +154,7 @@
             </div>
             <div class="form-footer">
                 <div class="f-footer-left">
-                    <div class="row-check non-margin">
+                    <div class="row-check non-margin" v-if="update">
                         <input type="checkbox" v-model="NewFee.follow">
                         <label></label>
                         <div class="col-row-text">
@@ -168,8 +168,15 @@
                         :Text="'Đóng'"
                         :second="true"/>
                     <Button 
+                    :Text="'Lưu và thêm'"
+                    :second="false"
+                    v-if="update==false"
+                    @click="Save();LoadData();"
+                    />
+                    <Button 
                     :Text="'Lưu'"
-                    :second="false"/>
+                    :second="false"
+                    @click="Save();"/>
                 </div>
             </div>
             <div class="btn-close-form"
@@ -185,38 +192,21 @@
 // import Textbox from '../layout/Textbox.vue'
 import Label from '../layout/Label.vue'
 import Button from '../layout/Button.vue'
+import axios from 'axios'
 // import axios from 'axios'
 export default {
     props:{
+        Title:String,
         focusOn: Boolean,
         Fee:{},
         feeGroups: Object,
         unitFees: Object,
-        feeRanges: Object
+        feeRanges: Object,
+        update: Object
     },
     data() {
         return {
             NewFee: {
-                feeId: null,
-                feeName: '',
-                feeGroupId: null,
-                feeRangeId: null,
-                unitFeeId: null,
-                turnFee: '',
-                amountOfFee: null,
-                discount: false,
-                allowExportBill: false,
-                allowExportLicense: false,
-                feeRequired: false,
-                allowReturn: false,
-                feePrivate: false,
-                typeRegistion: false,
-                follow: false,
-                feeGroupName: '',
-                quality:'',
-                createdBy: null,
-                createdDate: null,
-                modifiedDate: null
             },
             NewFeeGroup:{},
             UnitFee: {},
@@ -238,10 +228,24 @@ export default {
     methods:{
         CloseForm: function(){
             this.$emit('CloseForm');
+        },
+        LoadData(){
+            this.$emit('LoadData');
+        },
+        Save: function(){
+            if(this.update){
+                console.log(this.NewFee);
+                axios.put('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> {console.log(result)})
+            }
+            else{
+                axios.post('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> {console.log(result)})
+            }
+            this.CloseForm();
+        }
+
     },
     created() {
     },
-},
 }
 </script>
 

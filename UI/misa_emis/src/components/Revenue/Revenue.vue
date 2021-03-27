@@ -58,12 +58,14 @@
                             <div class="th-text">Mức thu</div>
                             <div class="btn-filter"><input type="text"></div>
                         </th>
-                        <th colspan="1">
+                        <th colspan="1" style="min-width: 80px">
                             <div class="th-text">Kỳ thu</div>
                             <div class="btn-filter">
                                 <select >
-                                    <option value=""> </option>
-                                    <option value=""> </option>
+                                    <option value="0">Tháng</option>
+                                    <option value="1">Quý</option>
+                                    <option value="2">Kỳ học</option>
+                                    <option value="3">Năm</option>
                                 </select>
                             </div>
                         </th>
@@ -83,8 +85,8 @@
                         </td>
                         <td colspan="1">{{fee.feeName}}</td>
                         <td colspan="1">{{fee.feeGroupName}}</td>
-                        <td colspan="1" class="align-right-text">{{fee.amountOfFee}}đ</td>
-                        <td colspan="1" class="td-to-check">{{fee.turnFee}}</td>
+                        <td colspan="1" class="align-right-text">{{FormatAmountOfFee(fee.amountOfFee,fee.turnFee)}}</td>
+                        <td colspan="1" class="td-to-check">{{ TurnFeeFormat(fee.turnFee) }}</td>
                         <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.discount}"></div></td>
                         <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.allowExportBill}"></div></td>
                         <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.allowExportLicense}"></div></td>
@@ -114,6 +116,9 @@
         :feeGroups="feeGroups"
         :feeRanges="feeRanges"
         :unitFees="unitFees"
+        :Title="Title"
+        :update="update"
+        @LoadData="LoadData()"
         />
         <DeletePopup 
         v-show="popup.deleteOne" 
@@ -126,7 +131,8 @@
         v-show="popup.deleteMulti"
         :text="'Bạn có chắc muốn xóa những khoản thu đã chọn?'"
         :secondbtn="true"
-        @DeleteCancel="DeleteCancel()"/>
+        @DeleteCancel="DeleteCancel()"
+        />
     </div>
 </template>
 
@@ -138,6 +144,13 @@ import DeletePopup from '../popup/DeletePopup.vue'
 export default {
     data() {
         return {
+            /**
+             * update : true=> sửa,
+             * update: false => thêm
+             * 
+             */
+            update: false,  
+            Title:'',
             text: 'Thêm mới',
             second: false,
             selectedCheck: false,
@@ -149,27 +162,7 @@ export default {
                 deleteMulti: false,
                 deleteFail: false
             },
-            Fee:{
-                feeId: '',
-                feeName: '',
-                feeGroupId: '',
-                feeRangeId: '',
-                unitFeeId: '',
-                turnFee: '',
-                amountOfFee: 220000,
-                discount: false,
-                allowExportBill: false,
-                allowExportLicense: false,
-                feeRequired: false,
-                allowReturn: false,
-                feePrivate: false,
-                typeRegistion: false,
-                follow: false,
-                feeGroupName: '',
-                createdBy: null,
-                createdDate: '',
-                modifiedDate: ''
-            },
+            Fee:{},
             FeeId: '',
             FeeGroups:{},
             feeGroups:{},
@@ -202,8 +195,7 @@ export default {
         LoadFeeStopFollow:function(){
             this.selectedCheck = !this.selectedCheck;
             if(this.selectedCheck == true){
-                    var stopFollow = axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((result) =>{return result.data})
-                    this.Fees = stopFollow;
+                axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((result)=>{this.Fees = result.data.data})
             }
             else{
                 this.LoadData();
@@ -222,6 +214,8 @@ export default {
                 this.unitFees = {...this.UnitFees},
                 this.feeRanges = {...this.FeeRanges}
             },0)
+            this.Title="Thêm khoản thu"
+            this.update = false
         },
         /**
          * Hàm đóng form thêm, sửa 
@@ -230,6 +224,12 @@ export default {
             this.show = false;
             this.focusOn = false;
             this.Fee = {}
+            this.selectedCheck = false;
+            setTimeout(()=>{
+                    this.LoadData();
+                },1000
+            )
+            
         },
         /**
          * Hàm mở form để chỉnh sửa thông tin khoản thu
@@ -244,6 +244,8 @@ export default {
                 this.unitFees = {...this.UnitFees},
                 this.feeRanges = {...this.FeeRanges}
             },0)
+            this.Title="Sửa khoản thu",
+            this.update = true
             
         },
         DeletePopup(FeeId){
@@ -272,8 +274,38 @@ export default {
          * Hàm laod lại dữ liệu khi có thay đổi
          */
         LoadData:function(){
-            var newres = axios.get('https://localhost:44341/api/v1/fee').then((res)=>{return res.data});
-            this.Fees = newres;
+            axios.get('https://localhost:44341/api/v1/fee').then((res)=>{this.Fees = res.data; console.log(this.Fees)});
+        },
+        /**
+         * Hàm format kỳ thu
+         */
+        TurnFeeFormat:function(turn){
+            if(turn == 0){
+                return "Tháng"
+            }
+            else if(turn == 1){
+                return "Quý"
+            }
+            else if(turn == 2){
+                return "Học kỳ"
+            }
+            else{
+                return "Năm học"
+            }
+        },
+        FormatAmountOfFee(amount, turn){
+            if(turn == 0){
+                return amount+"đ/Tháng"
+            }
+            else if(turn == 1){
+                return amount+"đ/Quý"
+            }
+            else if(turn == 2){
+                return amount+"đ/Học kỳ"
+            }
+            else{
+                return amount+"đ/Năm học"
+            }
         }
     },
     async created() {
@@ -285,7 +317,6 @@ export default {
         this.UnitFees = unit.data
         const range = await axios.get('https://localhost:44341/api/v1/FeeRange')
         this.FeeRanges = range.data
-        console.log(this.Fees);
     },
 }
 </script>

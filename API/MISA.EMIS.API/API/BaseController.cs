@@ -50,7 +50,7 @@ namespace MISA.EMIS.API.API
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] entity obj)
+        public IActionResult Post( entity obj)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace MISA.EMIS.API.API
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] entity obj)
+        public IActionResult Put( entity obj)
         {
             try
             {
