@@ -131,6 +131,7 @@ export default {
     .nav-item:hover{
         background-color:#4D4F5C;
         border-left: 4px solid #00d469;
+        padding-left: 6px !important;
     }
     .nav-item:hover .nav-item-text{
         color: #00d469;

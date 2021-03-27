@@ -10,6 +10,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using static MISA.Core.Entities.CreatedInfor;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MISA.Core.Service
 {
@@ -136,7 +138,7 @@ namespace MISA.Core.Service
         /// <typeparam name="entity">Class</typeparam>
         /// <param name="Id">Id của bản ghi</param>
         /// <returns>Số dòng bị ảnh hưởng</returns>
-        public ServiceResult DeleteObject<entity>(Guid Id)
+        public virtual ServiceResult DeleteObject<entity>(Guid Id)
         {
             var rowAffect = baseRepository.DeleteObject<entity>(Id);
             if (rowAffect <= 0)

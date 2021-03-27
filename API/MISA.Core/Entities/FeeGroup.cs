@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace MISA.Core.Entities
@@ -15,11 +16,14 @@ namespace MISA.Core.Entities
         /// <summary>
         /// Khóa chính 
         /// </summary>
+        [Primarykey]
         public Guid FeeGroupId { get; set; }
 
         /// <summary>
         /// Tên nhóm khoản thu
         /// </summary>
+        [Required]
+        [DisplayName("Tên nhóm khoản thu")]
         public string FeeGroupName { get; set; }
 
         /// <summary>

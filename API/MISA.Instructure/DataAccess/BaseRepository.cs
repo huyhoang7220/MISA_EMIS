@@ -10,6 +10,10 @@ using System.Text;
 
 namespace MISA.Instructure.DataAccess
 {
+    /// <summary>
+    /// Created by:VXKHANH(26/3/2021)
+    /// 
+    /// </summary>
     public class BaseRepository:IBaseRepository
     {
         /// <summary>

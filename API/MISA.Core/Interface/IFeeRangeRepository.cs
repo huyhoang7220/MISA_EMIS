@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MISA.Core.Interface
 {
-    public interface IFeeGroupService:IBaseService
+    public interface IFeeRangeRepository:IBaseRepository
     {
     }
 }

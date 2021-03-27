@@ -160,6 +160,15 @@ namespace MISA.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Không được phét xóa dữ liệu này!.
+        /// </summary>
+        internal static string NotAllowDeleteThisData {
+            get {
+                return ResourceManager.GetString("NotAllowDeleteThisData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  không được để trống!.
         /// </summary>
         internal static string RequiredValue {
