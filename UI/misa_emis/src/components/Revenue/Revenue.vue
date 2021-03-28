@@ -43,7 +43,7 @@
 
             <div class="grid-list">
                 <div class="outline-table">
-                <table cellspacing="0" cellpadding="0">
+                <table cellspacing="0" cellpadding="0" border="0">
                     <tr>
                         <th colspan="1"> </th>
                         <th colspan="1" class="col-name-revenue">
@@ -58,7 +58,7 @@
                             <div class="th-text">Mức thu</div>
                             <div class="btn-filter"><input type="text"></div>
                         </th>
-                        <th colspan="1" style="min-width: 80px">
+                        <th colspan="1" style="min-width: 96px">
                             <div class="th-text">Kỳ thu</div>
                             <div class="btn-filter">
                                 <select >
@@ -83,8 +83,15 @@
                             @click="checkLine()" 
                             :class="{'selected-line':false}"></div>
                         </td>
-                        <td colspan="1">{{fee.feeName}}</td>
-                        <td colspan="1">{{fee.feeGroupName}}</td>
+                        <td colspan="1" @click="RowEdit(fee)">
+                            <div class="main-cell">
+                                <div class="cell-link">{{fee.feeName}}</div>
+                                <div class="important" v-if="fee.important">
+                                    <div class="tooltip-cell">Đây là khoản thu mặc định của hệ thống, bạn không thể xóa.</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td colspan="1" >{{fee.feeGroupName}}</td>
                         <td colspan="1" class="align-right-text">{{FormatAmountOfFee(fee.amountOfFee,fee.turnFee)}}</td>
                         <td colspan="1" class="td-to-check">{{ TurnFeeFormat(fee.turnFee) }}</td>
                         <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.discount}"></div></td>
@@ -120,19 +127,35 @@
         :update="update"
         @LoadData="LoadData()"
         />
+        <!-- Popup hỏi người dùng xóa dòng vừa chọn hay không (Xóa 1 dòng) -->
         <DeletePopup 
         v-show="popup.deleteOne" 
         :text="'Bạn có chắc muốn xóa khoản thu đã chọn?'"
         :secondbtn="true"
+        :firstbtn="true"
         @DeleteCancel="DeleteCancel()"
         @DeleteOne="DeleteOne"
         :FeeId="FeeId"/>
+
+        <!-- Popup hỏi người dùng có muốn xóa những dòng đã chọn hay không -->
         <DeletePopup 
         v-show="popup.deleteMulti"
         :text="'Bạn có chắc muốn xóa những khoản thu đã chọn?'"
         :secondbtn="true"
         @DeleteCancel="DeleteCancel()"
         />
+
+        <DeletePopup 
+        v-show="notify"
+        :text="notifyText"
+        :secondbtn="false"
+        @ClosePopup="ClosePopup()"
+        :thirdbtn="true"
+        :firstbtn="false"
+        />
+        <!-- Preload khi xóa dữ liệu -->
+        <div class="preload" v-show="loading">
+        </div>
     </div>
 </template>
 
@@ -150,26 +173,43 @@ export default {
              * 
              */
             update: false,  
+            /**Biến truyền vào tên của dialog  */
             Title:'',
+            /**Tên nút thêm mới  */
             text: 'Thêm mới',
+            /**Biến kiểm tra xem có thêm nút thứ 2 trong dialog */
             second: false,
+            /**Kiểm tra checkbox ngừng theo dõi */
             selectedCheck: false,
+            /** */
             show: false,
+            /**Biến theo dõi sự thay đổi để forcus vào ô textbox Tên nhóm khách hàng*/
             focusOn: false,
+            /**Danh sách khoản thu */
             Fees:{},
+            /**Kiểm tra loại hiển thị thông báo */
             popup:{
                 deleteOne: false,
                 deleteMulti: false,
                 deleteFail: false
             },
+            /**Biến bật popup thông báo */
+            notify: false,
+            /**Biến truyền câu thông báo vào popup */
+            notifyText: '',
+            /**Đối tượng khoản thu */
             Fee:{},
+            /**Biến lưu 1 giá trị khóa chính của khoản thu */
             FeeId: '',
+            /** */
             FeeGroups:{},
             feeGroups:{},
             UnitFees:{},
             unitFees:{},
             FeeRanges:{},
-            feeRanges:{}
+            feeRanges:{},
+            /**Biến bật preload*/
+            loading : false
         }
     },
     components:{
@@ -190,12 +230,19 @@ export default {
     },
     methods:{
         /**
+         * Hàm đóng thông báo. Dành cho thông báo lỗi hoặc thành công
+         * Không thực hiện thêm event gì
+         */
+        ClosePopup(){
+            this.notify = false;
+        },
+        /**
          * Hàm laod khoản thu ngừng theo dõi
          */
-        LoadFeeStopFollow:function(){
+        LoadFeeStopFollow:async function(){
             this.selectedCheck = !this.selectedCheck;
             if(this.selectedCheck == true){
-                axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((result)=>{this.Fees = result.data.data})
+                this.Fees = await axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((result)=>{return result.data})
             }
             else{
                 this.LoadData();
@@ -225,11 +272,7 @@ export default {
             this.focusOn = false;
             this.Fee = {}
             this.selectedCheck = false;
-            setTimeout(()=>{
-                    this.LoadData();
-                },1000
-            )
-            
+            this.LoadData();            
         },
         /**
          * Hàm mở form để chỉnh sửa thông tin khoản thu
@@ -248,11 +291,16 @@ export default {
             this.update = true
             
         },
+        /**
+         * Hàm xóa 1 dòng. Thực hiện sau khi nhẫn nút xóa trên popup
+         */
         DeletePopup(FeeId){
             this.popup.deleteOne = true;
             this.FeeId = FeeId;
         },
-
+        /**
+         * Hàm hủy xóa 
+         */
         DeleteCancel:function(){
             this.popup.deleteOne = false;
             this.popup.deleteMulti = false;
@@ -263,18 +311,46 @@ export default {
          * Hàm xóa 1 dòng dữ liệu
          * và đóng thông báo
          */
-        DeleteOne:function(FeeId){
-            var rowaffect = axios.delete('https://localhost:44341/api/v1/Fee/'+FeeId)
-            console.log(rowaffect);
-            this.popup = false
+        DeleteOne: async function(FeeId){
+            var rowaffect
+            rowaffect = await axios.delete('https://localhost:44341/api/v1/Fee/'+FeeId).then((response)=>{ return response.data.data;})
+            console.log(rowaffect)
+            this.popup.deleteOne = false;
+            this.popup.deleteMulti = false;
+            this.popup.deleteFail = false;
             this.FeeId = '';
-            this.LoadData();
-        },
+            // setTimeout(()=>{
+                console.log(rowaffect)
+
+                if(rowaffect == 1){
+                    this.notifyText = "Đã xóa khoản thu!"
+                    this.notify = true;
+
+                }
+                else{
+                    this.notifyText = "Bạn không thể xóa dữ liệu của hệ thống!"
+                    this.notify = true;
+                }
+                if(this.selectedCheck == true){
+                    this.LoadDataStopFollow()
+                }
+                else{
+                    this.LoadData()
+                }
+              
+            },
         /**
-         * Hàm laod lại dữ liệu khi có thay đổi
+         * Hàm laod lại dữ liệu khi có thay đổi (Đang theo dõi)
          */
-        LoadData:function(){
-            axios.get('https://localhost:44341/api/v1/fee').then((res)=>{this.Fees = res.data; console.log(this.Fees)});
+        LoadData: async function(){
+            this.Fees =  await axios.get('https://localhost:44341/api/v1/fee').then((respons)=>{
+                return respons.data
+            })
+        },
+        LoadDataStopFollow: async function(){
+            this.Fees =  await axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((respons)=>{
+                return respons.data
+            })
         },
         /**
          * Hàm format kỳ thu
@@ -293,22 +369,29 @@ export default {
                 return "Năm học"
             }
         },
+        /**
+         * Hàm format số tiền
+         */
         FormatAmountOfFee(amount, turn){
+            var money = amount.toFixed(0);
+            money = money.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1.');
+            //var RightFormat = money.split(".")
             if(turn == 0){
-                return amount+"đ/Tháng"
+                return money+"đ/Tháng"
             }
             else if(turn == 1){
-                return amount+"đ/Quý"
+                return money+"đ/Quý"
             }
             else if(turn == 2){
-                return amount+"đ/Học kỳ"
+                return money+"đ/Học kỳ"
             }
             else{
-                return amount+"đ/Năm học"
+                return money+"đ/Năm học"
             }
         }
     },
     async created() {
+        this.loading = true;
         const res = await axios.get('https://localhost:44341/api/v1/fee');
         this.Fees = res.data
         const res_sub = await axios.get('https://localhost:44341/api/v1/FeeGroup')
@@ -317,6 +400,7 @@ export default {
         this.UnitFees = unit.data
         const range = await axios.get('https://localhost:44341/api/v1/FeeRange')
         this.FeeRanges = range.data
+        this.loading = false;
     },
 }
 </script>

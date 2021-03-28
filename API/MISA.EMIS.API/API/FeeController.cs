@@ -59,7 +59,7 @@ namespace MISA.EMIS.API.API
             try
             {
                 var result = feeService.GetFeeIsStopFollow();
-                return StatusCode(200, result);
+                return StatusCode(200, result.Data);
             }
             catch (Exception e)
             {

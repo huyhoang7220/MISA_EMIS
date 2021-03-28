@@ -4,8 +4,9 @@
             <div class="popup-title">Thông báo</div>
             <div class="popup-message">{{text}}</div>
             <div class="popup-btn">
-                <Button :Text="'Không'" :second="true" v-if="secondbtn" :minwidth="true" @click="DeleteCancel()"/>
-                <Button :Text="'Xóa'" :second="false" :minwidth="true" @click="DeleteOne()"/>
+                <Button :Text="'Không'" :second="true" v-if="secondbtn" :minwidth="true" :style="'border: 1px solid #4d4f5c'" @click="DeleteCancel()"/>
+                <Button :Text="'Xóa'" :second="false" v-if="firstbtn" :minwidth="true" @click="DeleteOne()"/>
+                <Button :Text="'Đóng'" :second="false" v-if="thirdbtn" :minwidth="true" @click="ClosePopup()"/>
             </div>
             <div class="btn-close-form"
                 @click="DeleteCancel()">
@@ -19,7 +20,9 @@
 import Button from '../layout/Button.vue'
 export default {
     props:{
+        thirdbtn: Boolean,
         secondbtn:Boolean,
+        firstbtn:Boolean,
         text:String,
         FeeId: String
     },
@@ -32,6 +35,9 @@ export default {
         },
         DeleteOne:function(){
             this.$emit('DeleteOne',this.FeeId)
+        },
+        ClosePopup:function(){
+            this.$emit('ClosePopup');
         }
     }
 }
@@ -50,7 +56,7 @@ export default {
         background-color: black;
         position: absolute;
         opacity: 0.4;
-        z-index: 50;
+        z-index: 100;
     }
     .popup-content{
         position: absolute;

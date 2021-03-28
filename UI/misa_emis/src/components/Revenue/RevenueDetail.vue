@@ -1,25 +1,39 @@
 <template>
     <div class="popup">
         <div class="form">
+            <!-- <button @click="ValideteForm()">Load</button> -->
             <div class="form-title">
                 {{Title}}
             </div>
             <div class="form-content">
                 <div class="form-left">
                     <!-- Tên khoản thu -->
-                    <Label :text="'Tên khoản thu '" :required="true"/>
+                    <Label :text="'Tên khoản thu '" 
+                        :required="true"/>
                     <div class="input">
-                        <input type="text" ref="feeName" class="textbox margin-r-16" v-model="NewFee.feeName">
+                        <input type="text" 
+                            ref="feeName" 
+                            class="textbox 
+                            margin-r-16" 
+                            v-model="NewFee.feeName"
+                            :class="{'required-outline':required.feeName}"
+                        >
+                        <div class="tooltip" 
+                            v-show="required.feeName">
+                                Dữ liệu không được để trống!
+                        </div>
                     </div>
 
                     <!-- Nhóm khoản thu -->
                     <Label :text="'Thuộc nhóm khoản thu'"/>
                     <div class="form-left-row">
-                        <select v-model="NewFee.feeGroupId">
-                            <option v-for="feeGroup in feeGroups" 
-                            :key="feeGroup.feeGroupId"
-                            :value="feeGroup.feeGroupId">
-                                {{feeGroup.feeGroupName}}
+                        <select v-model="NewFee.feeGroupId" 
+                            ref="feeGroup">
+                            <option class="select-item"
+                                v-for="feeGroup in feeGroups" 
+                                :key="feeGroup.feeGroupId"
+                                :value="feeGroup.feeGroupId">
+                                    {{feeGroup.feeGroupName}}
                             </option>
                         </select>
                         <div class="btn-plus"></div>
@@ -27,43 +41,66 @@
 
                     <!-- Mức thu -->
                     <div class="form-left-row3">
+                        <!-- Mức thu  -->
                         <div class="mount">
-                            <Label :text="'Mức thu '" :required="true"/>
+                            <Label :text="'Mức thu '" :required="true" />
                             <div class="mount-row-2">
                                 <!-- <input type="text" class="radius"> -->
                                  <div class="input">
-                                    <input type="text" class="textbox" v-model="NewFee.amountOfFee">
+                                    <input type="text" class="textbox" 
+                                        v-model="NewFee.amountOfFee"
+                                        id = "amount"
+                                        @keyup="FormatMoney()"
+                                        ref="amountOfFee"
+                                        :class="{'required-outline':required.feeName}"
+                                    >
+                                    <div class="tooltip" 
+                                        v-show="required.amountOfFee">
+                                            Dữ liệu không được để trống!
+                                    </div>
                                 </div>
                                 <div class="unit-text">đ/</div>
                             </div>
                         </div>
+
+                        <!-- Đơn vị khoản thu -->
                         <div class="unit">
-                            <Label :text="'Đơn vị '" :required="true"/>
-                            <select class="radius" v-model="NewFee.unitFeeId">
+                            <Label :text="'Đơn vị '" 
+                                :required="true"/>
+                            <select class="radius" 
+                                :class="{'required-outline':required.feeName}"
+                                v-model="NewFee.unitFeeId"
+                                ref="unitFee">
                                 <option v-for="unitFee in unitFees"
                                 :key="unitFee.unitFeeId"
                                 :value="unitFee.unitFeeId">
                                     {{unitFee.unitFeeName}}
                                 </option>
                             </select>
+                            <div class="left-tooltip" v-show="required.unitFee">Dữ liệu không được để trống!</div>
                         </div>
                     </div>
 
                     <!-- Phạm vi thu -->
                     <Label :text="'Phạm vi thu '" :required="true"/>
                     <div class="form-left-row ">
-                        <select class="mar-r-16px radius" v-model="NewFee.feeRangeId">
+                        <select class="mar-r-16px radius"
+                            :class="{'required-outline':required.feeName}"
+                            v-model="NewFee.feeRangeId"
+                            ref="feeRange">
                             <option v-for="feeRange in feeRanges" 
                             :key="feeRange.feeRangeId"
                             :value="feeRange.feeRangeId">{{feeRange.feeRangeName}}</option>
                         </select>
+                        <div class="tooltip" v-show="required.feeRange">Dữ liệu không được để trống!</div>
                     </div>
 
                     <!-- Tính chất  -->
                     <Label :text="'Tính chất'"/>
                     <div class="form-left-row ">
-                        <select class="mar-r-16px radius">
-                            <option value="1">Toàn trường</option>
+                        <select class="mar-r-16px radius" v-model="NewFee.quality">
+                            <option value="0">Thu theo thỏa thuận</option>
+                            <option value="1">Thu theo hệ thống</option>
                         </select>
                     </div>
 
@@ -71,28 +108,41 @@
                     <Label :text="'Kỳ thu '" :required="true"/>
                     <div class="radio-row">
                         <!-- <form action=""> -->
-                            <div class="radio-button">
-                                <input type="radio" name="term" v-model="NewFee.turnFee" value="0">
+                            <div class="radio-button" >
+                                <input type="radio" name="term" 
+                                    v-model="NewFee.turnFee" 
+                                    value="0"
+                                    >
                                 <label for=""></label>
                                 <div class="radio-text">Tháng</div>
                             </div>
                              <div class="radio-button" >
-                                <input type="radio" name="term" v-model="NewFee.turnFee" value="1">
+                                <input type="radio" name="term" 
+                                    v-model="NewFee.turnFee" 
+                                    value="1"
+                                    >
                                 <label for=""></label>
                                 <div class="radio-text">Quý</div>
                             </div>
 
                              <div class="radio-button">
-                                <input type="radio" name="term" v-model="NewFee.turnFee" value="2">
+                                <input type="radio" name="term" 
+                                    v-model="NewFee.turnFee" 
+                                    value="2"
+                                    >
                                 <label for=""></label>
                                 <div class="radio-text">Học kỳ</div>
                             </div>
                             
-                             <div class="radio-button">
-                                <input type="radio" name="term" v-model="NewFee.turnFee"  value="3">
+                             <div class="radio-button" >
+                                <input type="radio" name="term" 
+                                    v-model="NewFee.turnFee"  
+                                    value="3"
+                                    >
                                 <label for=""></label>
                                 <div class="radio-text">Năm học</div>
                             </div>
+                            <div class="tooltip" v-show="required.turnFee">Dữ liệu không được để trống!</div>
                         <!-- </form> -->
                     </div>
                 </div>
@@ -129,7 +179,7 @@
                     </div>
                     <div class="form-r-col">
                          <div class="row-check">
-                            <input type="checkbox" checked v-model="NewFee.allowExportLicense">
+                            <input type="checkbox" v-model="NewFee.allowExportLicense">
                             <label></label>
                             <div class="col-row-text">
                                 Cho phép xuất chứng từ
@@ -186,6 +236,11 @@
         <div class="blur">
 
         </div>
+        <Popup  
+            :thirdbtn="true"
+            :text="notifyText"
+            v-if="notifyShow"
+            @ClosePopup="ClosePopup()"/>
     </div>
 </template>
 <script>
@@ -193,7 +248,7 @@
 import Label from '../layout/Label.vue'
 import Button from '../layout/Button.vue'
 import axios from 'axios'
-// import axios from 'axios'
+import Popup from '../popup/DeletePopup.vue'
 export default {
     props:{
         Title:String,
@@ -206,10 +261,25 @@ export default {
     },
     data() {
         return {
-            NewFee: {
-            },
+            /**Đối tượng khoản thu mới*/
+            NewFee: {},
+            /**Đối tượng nhóm khách hàng */
             NewFeeGroup:{},
+            /**Đối tượng đơn vị khoản thu */
             UnitFee: {},
+            /**Biến truyền vào câu muốn thông báo */
+            notifyText: '',
+            /**Biến dùng để bật tắt, hiển thị thông báo */
+            notifyShow: false,
+            /**Đối tượng dùng để kiểm tra bắt buộc nhập*/
+            required:{
+                feeName: false,
+                unitFee: false,
+                amountOfFee: false,
+                feeRange: false,
+                turnFee: false
+            },
+            isValid: false
         }
     },
     beforeUpdate(){
@@ -223,26 +293,145 @@ export default {
     components:{
         // Textbox,
         Label,
-        Button
+        Button,
+        Popup
     },
     methods:{
+        /**
+         * Dóng popup thông báo 
+         */
+        ClosePopup:function(){
+            this.notifyShow = false;
+            this.CloseForm()
+        },
+        /**
+         * Đóng form đang mở
+         */
         CloseForm: function(){
             this.$emit('CloseForm');
         },
         LoadData(){
             this.$emit('LoadData');
         },
-        Save: function(){
-            if(this.update){
-                console.log(this.NewFee);
-                axios.put('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> {console.log(result)})
+        /**
+         * Hàm thực hiện gửi request thêm hoặc sửa
+         */
+        Save:async function(){
+            this.ValideteForm();
+            if(this.isValid == true){
+                this.GetValue();
+                var rowaffect
+                if(this.update){
+                    rowaffect = await axios.put('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> { return result.data.data})
+                }
+                else{
+                    rowaffect = await axios.post('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> {return result.data.data})
+                }
+                console.log(rowaffect)
+                if(rowaffect == 1){
+                    if(this.update){
+                        this.notifyText = 'Đã cập nhật dữ liệu.'
+                    }
+                    else{
+                        this.notifyText = 'Dữ liệu đã được thêm thành công.'
+                    }    
+                }else{
+                    if(this.update){
+                        this.notifyText = 'Dữ liệu chưa được cập nhật!'
+                    }
+                    else{
+                        this.notifyText = 'Dữ liệu chưa được thêm mới!'
+                    }   
+                }
+                this.notifyShow = true
+            }
+        },
+        /**
+         * Hàm dùng để format tiền
+         */
+        // FormatMoney:function(amount){
+        //     var money = amount.toFixed(0);
+        //     money = money.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1.');
+        //     return money;
+        // }
+        FormatMoney(){
+            var NewValue = document.getElementById("amount").value
+            //Khử dấu . để tạo thành chuỗi liên 
+            NewValue = NewValue.toString().split(".").join("")
+            console.log(NewValue)
+            //Tách chuỗi liền nhau thành chuôi có dạng 00.000.000
+            this.NewFee.amountOfFee = NewValue.replace(/(\d)(?=(?:\d{3})+$)/g, '$1.')
+            console.log(this.NewFee.amountOfFee)
+        },
+
+        /**
+         * Trả về giá trị của mức khoản thu để gửi lên serve
+         */
+        GetValue(){
+            this.NewFee.amountOfFee = this.NewFee.amountOfFee.split(".").join("")
+            this.NewFee.amountOfFee = parseFloat(this.NewFee.amountOfFee);
+            console.log(this.NewFee.amountOfFee)
+        },
+        /**Hàm validate dữ liệu cho các ô bắt buộc nhập */
+        ValideteForm(){
+            // var name = this.$refs.feeName.value
+            // var unit = this.$refs.unitFee.value
+            // var amount = this.$refs.amountOfFee.value
+            // var range = this.$refs.feeRange.value
+            // var turn = this.NewFee.turnFee
+            var name = this.NewFee.feeName
+            var unit = this.NewFee.unitFeeId
+            var amount = this.NewFee.amountOfFee
+            var range = this.NewFee.feeRangeId
+            var turn = this.NewFee.turnFee
+
+            /**Kiểm tra tên khoản thu */
+            if(name == "" || name == null || name == undefined){
+                this.required.feeName = true;
+                this.isValid = false
+            }   
+            else{
+                this.required.feeName = false;
+                this.isValid = true
+            }
+            /**Kiểm tra đơn vị thu */
+            if(unit == "" || unit == null || unit == undefined){
+                this.required.unitFee = true
+                this.isValid = false
             }
             else{
-                axios.post('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> {console.log(result)})
+                this.required.unitFee = false
+                this.isValid = true
             }
-            this.CloseForm();
+            /**Kiểm tra mức thu */
+            if(amount == "" || amount == null || amount == undefined){
+                this.required.amountOfFee = true
+                this.isValid = false
+            }
+            else{
+                 this.required.amountOfFee = false
+                 this.isValid = true
+            }
+            /**Kiểm tra phạm vi thu */
+            if(range == "" || range == null || range == undefined){
+                this.required.feeRange = true
+                this.isValid = false
+            }
+            else{
+                this.required.feeRange = false
+                this.isValid = true
+            }
+            /**Kiểm tra kỳ thu */
+            if(turn == "" || turn == null || turn == undefined){
+                this.required.turnFee = true
+                this.isValid = false
+            }
+            else{
+                this.required.turnFee = false
+                this.isValid = true
+            }
+            console.log(this.isValid)
         }
-
     },
     created() {
     },

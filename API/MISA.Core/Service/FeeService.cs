@@ -86,11 +86,12 @@ namespace MISA.Core.Service
             var fee = feeRepository.GetObjectById<Fee>(Id);
             if(fee != null)
             {
-                var FeeName = fee.GetType().GetProperty("FeeName").GetValue(fee);
-                if (FeeName.ToString().ToLower() == "học phí")
+                var FeeName = fee.GetType().GetProperty("Important").GetValue(fee);
+                if (Convert.ToBoolean(FeeName) == true)
                 {
                     serviceResult.Code = MISACode.NoRecordDelete;
                     serviceResult.Msg = Properties.Resources.NotAllowDeleteThisData;
+                    serviceResult.Data = 0;
                     return true;
                 }
                 return false;
