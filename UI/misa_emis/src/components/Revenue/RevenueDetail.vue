@@ -297,6 +297,7 @@ export default {
         // this.$nextTick(()=>{
         //     this.NewFeeGroup = {...this.FeeGroups}
         // })
+        
     },
     components:{
         // Textbox,
@@ -383,7 +384,9 @@ export default {
          * Trả về giá trị của mức khoản thu để gửi lên serve
          */
         GetValue(){
-            this.NewFee.amountOfFee = this.NewFee.amountOfFee.split(".").join("")
+            if(this.NewFee.amountOfFee.toString().indexOf(".") >-1){
+                this.NewFee.amountOfFee = this.NewFee.amountOfFee.split(".").join("")
+            }
             this.NewFee.amountOfFee = parseFloat(this.NewFee.amountOfFee);
             console.log(this.NewFee.amountOfFee)
         },
@@ -454,6 +457,7 @@ export default {
     //     }
     // },
     created() {
+        
     },
 }
 </script>

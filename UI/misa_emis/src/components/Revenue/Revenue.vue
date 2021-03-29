@@ -36,7 +36,7 @@
                     :Text="'Sắp lại thứ tự'"
                         :second="true"
                         />
-                    <div class="trash-btn" @click="PopupDeleteMulti()">
+                    <div class="trash-btn" @click="DeleteAllSelected()">
 
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                             @click="fee.selected = !fee.selected;checkLine(fee.feeId,fee.selected);" 
                             :class="{'selected-line':fee.selected}"></div>
                         </td>
-                        <td colspan="1" @click="RowEdit(fee.feeId)">
+                        <td colspan="1" @click="RowEdit(fee)">
                             <div class="main-cell">
                                 <div class="cell-link">{{fee.feeName}}</div>
                                 <div class="important" v-if="fee.important">
@@ -311,6 +311,7 @@ export default {
             this.popup.deleteMulti = false;
             this.popup.deleteFail = false;
             this.FeeId = '';
+            this.ListFee = [];
         },
         /**
          * Hàm xóa 1 dòng dữ liệu
@@ -422,7 +423,7 @@ export default {
             this.popup.deleteFail = false;
         },
         /**
-         * 
+         * Hàm xóa nhiều dữ liệu 1 lúc
          */
         DeleteAllSelected: async function(){
             var rowaffect  = await axios({
@@ -433,16 +434,11 @@ export default {
             }).then((result)=>{
                 return result.data.data;
             })
-            //await axios.delete('https://localhost:44341/api/v1/Fee/DeleteMulti',JsonArray).then((result) => {
-            //     return result.data.data
-            // })
-            console.log(rowaffect);
             this.popup.deleteOne = false;
             this.popup.deleteMulti = false;
             this.popup.deleteFail = false;
-            this.FeeId = '';
             console.log(rowaffect)
-            if(rowaffect == 1){
+            if(rowaffect >= 1){
                 this.notifyText = "Đã xóa những khoản thu này!"
                 this.notify = true;
             }
@@ -459,7 +455,7 @@ export default {
         }
     },
     async created() {
-        this.loading = true;
+        // this.loading = true;
         const res = await axios.get('https://localhost:44341/api/v1/fee');
         this.Fees = res.data
         const res_sub = await axios.get('https://localhost:44341/api/v1/FeeGroup')
@@ -468,7 +464,7 @@ export default {
         this.UnitFees = unit.data
         const range = await axios.get('https://localhost:44341/api/v1/FeeRange')
         this.FeeRanges = range.data
-        this.loading = false;
+        // this.loading = false;
     },
 }
 </script>
