@@ -79,11 +79,9 @@
                     </tr>
                     <tr v-for="fee in Fees" :key="fee.feeId"
                         @change="fee.selected = false"
-                        :class="{'row-focus':fee.selected}"
-                    >
+                        :class="{'row-focus':fee.selected}">
                         <td colspan="1"><div class="select-line"
-                             
-                            @click="fee.selected = !fee.selected;checkLine(fee,fee.selected);" 
+                            @click="fee.selected = !fee.selected;checkLine(fee.feeId,fee.selected);" 
                             :class="{'selected-line':fee.selected}"></div>
                         </td>
                         <td colspan="1" @click="RowEdit(fee.feeId)">

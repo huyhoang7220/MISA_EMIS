@@ -317,6 +317,11 @@ export default {
          */
         CloseForm: function(){
             this.$emit('CloseForm');
+            this.required.feeRange = false;
+            this.required.unitFee = false;
+            this.required.amountOfFee = false;
+            this.required.feeName = false;
+            this.required.turnFee = false;
         },
         LoadData(){
             this.$emit('LoadData');

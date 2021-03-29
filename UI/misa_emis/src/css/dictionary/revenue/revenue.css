@@ -210,7 +210,7 @@ label{
     padding-right: 12px;
 }
 .row-focus{
-    background-color: #cce8ff;
+    background-color: #cce8ff !important;
 }
 .main-cell{
     display: flex;

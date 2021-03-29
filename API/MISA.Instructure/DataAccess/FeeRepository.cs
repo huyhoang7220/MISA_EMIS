@@ -25,5 +25,6 @@ namespace MISA.Instructure.DataAccess
             var fees = dbConnection.Query<Fee>(procName, commandType: CommandType.StoredProcedure).ToList();
             return fees;
         }
+
     }
 }

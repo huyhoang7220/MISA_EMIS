@@ -71,5 +71,11 @@ namespace MISA.EMIS.API.API
                 });
             }
         }
+
+        [HttpDelete("DeleteMulti")]
+        public IActionResult DeleteMultiFee(List<Guid> feeIds)
+        {
+            
+        }
     }
 }

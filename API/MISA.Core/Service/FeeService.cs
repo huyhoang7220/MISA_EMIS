@@ -76,6 +76,16 @@ namespace MISA.Core.Service
             return serviceResult;
         }
 
+        public ServiceResult DeleteMulti(List<Guid> feeIds)
+        {
+            var important = false;
+            foreach(Guid feeid in feeIds)
+            {
+                
+            }
+            return serviceResult;
+        }
+
         /// <summary>
         /// Hàm kiểm tra trường tên xem có phải học phí không. Nếu đúng thì không cho phép xóa
         /// </summary>
