@@ -76,14 +76,17 @@
                         <th colspan="1" class="td-to-check">Khoản thu bắt buộc</th>
                         <th colspan="1" class="td-to-check">Đang theo dõi</th>
                         <th colspan="1"></th>
-
                     </tr>
-                    <tr v-for="fee in Fees" :key="fee.feeId">
-                        <td colspan="1"><div class="select-line" 
-                            @click="checkLine()" 
-                            :class="{'selected-line':false}"></div>
+                    <tr v-for="fee in Fees" :key="fee.feeId"
+                        @change="fee.selected = false"
+                        :class="{'row-focus':fee.selected}"
+                    >
+                        <td colspan="1"><div class="select-line"
+                             
+                            @click="fee.selected = !fee.selected;checkLine(fee,fee.selected);" 
+                            :class="{'selected-line':fee.selected}"></div>
                         </td>
-                        <td colspan="1" @click="RowEdit(fee)">
+                        <td colspan="1" @click="RowEdit(fee.feeId)">
                             <div class="main-cell">
                                 <div class="cell-link">{{fee.feeName}}</div>
                                 <div class="important" v-if="fee.important">
@@ -209,7 +212,8 @@ export default {
             FeeRanges:{},
             feeRanges:{},
             /**Biến bật preload*/
-            loading : false
+            loading : false,
+            ListFee:[]
         }
     },
     components:{
@@ -388,6 +392,17 @@ export default {
             else{
                 return money+"đ/Năm học"
             }
+        },
+
+        checkLine:function(feeId,selected){
+            //Dùng hàm push để thêm khoản thu vừa chọn vào trong mảng
+            if(selected == true){
+                this.ListFee.push(feeId)
+            }else{ 
+                var index = this.ListFee.indexOf(feeId)
+                this.ListFee.splice(index, 1);
+            }
+            console.log(this.ListFee)
         }
     },
     async created() {

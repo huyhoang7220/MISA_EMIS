@@ -209,6 +209,9 @@ label{
     padding-left: 12px;
     padding-right: 12px;
 }
+.row-focus{
+    background-color: #cce8ff;
+}
 .main-cell{
     display: flex;
     align-items: center;

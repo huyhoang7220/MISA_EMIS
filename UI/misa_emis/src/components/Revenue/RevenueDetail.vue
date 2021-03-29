@@ -17,6 +17,7 @@
                             margin-r-16" 
                             v-model="NewFee.feeName"
                             :class="{'required-outline':required.feeName}"
+                            @keyup="required.feeName = false"
                         >
                         <div class="tooltip" 
                             v-show="required.feeName">
@@ -50,6 +51,7 @@
                                     <input type="text" class="textbox" 
                                         v-model="NewFee.amountOfFee"
                                         id = "amount"
+                                        maxlength="16"
                                         @keyup="FormatMoney()"
                                         ref="amountOfFee"
                                         :class="{'required-outline':required.feeName}"
@@ -67,7 +69,8 @@
                         <div class="unit">
                             <Label :text="'Đơn vị '" 
                                 :required="true"/>
-                            <select class="radius" 
+                            <select class="radius"
+                                @change="required.unitFee = false" 
                                 :class="{'required-outline':required.feeName}"
                                 v-model="NewFee.unitFeeId"
                                 ref="unitFee">
@@ -85,6 +88,7 @@
                     <Label :text="'Phạm vi thu '" :required="true"/>
                     <div class="form-left-row ">
                         <select class="mar-r-16px radius"
+                            @change="required.feeRange = false"
                             :class="{'required-outline':required.feeName}"
                             v-model="NewFee.feeRangeId"
                             ref="feeRange">
@@ -112,6 +116,7 @@
                                 <input type="radio" name="term" 
                                     v-model="NewFee.turnFee" 
                                     value="0"
+                                    @change="required.turnFee = false"
                                     >
                                 <label for=""></label>
                                 <div class="radio-text">Tháng</div>
@@ -120,6 +125,7 @@
                                 <input type="radio" name="term" 
                                     v-model="NewFee.turnFee" 
                                     value="1"
+                                    @change="required.turnFee = false"
                                     >
                                 <label for=""></label>
                                 <div class="radio-text">Quý</div>
@@ -129,6 +135,7 @@
                                 <input type="radio" name="term" 
                                     v-model="NewFee.turnFee" 
                                     value="2"
+                                    @change="required.turnFee = false"
                                     >
                                 <label for=""></label>
                                 <div class="radio-text">Học kỳ</div>
@@ -138,6 +145,7 @@
                                 <input type="radio" name="term" 
                                     v-model="NewFee.turnFee"  
                                     value="3"
+                                    @change="required.turnFee = false"
                                     >
                                 <label for=""></label>
                                 <div class="radio-text">Năm học</div>
@@ -317,7 +325,7 @@ export default {
          * Hàm thực hiện gửi request thêm hoặc sửa
          */
         Save:async function(){
-            this.ValideteForm();
+            this.ValidateForm();
             if(this.isValid == true){
                 this.GetValue();
                 var rowaffect
@@ -355,10 +363,12 @@ export default {
         //     return money;
         // }
         FormatMoney(){
+            //Xóa tooltip vì dữ liệu đã có
+            this.required.amountOfFee = false
             var NewValue = document.getElementById("amount").value
             //Khử dấu . để tạo thành chuỗi liên 
             NewValue = NewValue.toString().split(".").join("")
-            console.log(NewValue)
+            // console.log(NewValue)
             //Tách chuỗi liền nhau thành chuôi có dạng 00.000.000
             this.NewFee.amountOfFee = NewValue.replace(/(\d)(?=(?:\d{3})+$)/g, '$1.')
             console.log(this.NewFee.amountOfFee)
@@ -373,7 +383,7 @@ export default {
             console.log(this.NewFee.amountOfFee)
         },
         /**Hàm validate dữ liệu cho các ô bắt buộc nhập */
-        ValideteForm(){
+        ValidateForm(){
             // var name = this.$refs.feeName.value
             // var unit = this.$refs.unitFee.value
             // var amount = this.$refs.amountOfFee.value
@@ -433,6 +443,11 @@ export default {
             console.log(this.isValid)
         }
     },
+    // watch(){
+    //     this.NewFee.turnFee(){
+    //         this.required.turnFee = false
+    //     }
+    // },
     created() {
     },
 }
