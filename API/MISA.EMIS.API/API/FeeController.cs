@@ -75,7 +75,28 @@ namespace MISA.EMIS.API.API
         [HttpDelete("DeleteMulti")]
         public IActionResult DeleteMultiFee(List<Guid> feeIds)
         {
-            
+            try
+            {
+                var result = feeService.DeleteMulti(feeIds);
+                if (result.Code == MISACode.Success)
+                {
+                    
+                    return StatusCode(200, result);
+                }
+                else
+                {
+                    return StatusCode(400, result);
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new
+                {
+                    devMsg = e.Message,
+                    userMsg = Properties.Resources.ErrorMsg_ExceptionOccur,
+                    errorCode = MISACode.Exception.ToString()
+                });
+            }
         }
     }
 }

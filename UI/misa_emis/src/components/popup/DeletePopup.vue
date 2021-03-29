@@ -5,7 +5,7 @@
             <div class="popup-message">{{text}}</div>
             <div class="popup-btn">
                 <Button :Text="'Không'" :second="true" v-if="secondbtn" :minwidth="true" :style="'border: 1px solid #4d4f5c'" @click="DeleteCancel()"/>
-                <Button :Text="'Xóa'" :second="false" v-if="firstbtn" :minwidth="true" @click="DeleteOne()"/>
+                <Button :Text="'Xóa'" :second="false" v-if="firstbtn" :minwidth="true" @click="DeleteOne();DeleteMulti()"/>
                 <Button :Text="'Đóng'" :second="false" v-if="thirdbtn" :minwidth="true" @click="ClosePopup()"/>
             </div>
             <div class="btn-close-form"
@@ -38,6 +38,9 @@ export default {
         },
         ClosePopup:function(){
             this.$emit('ClosePopup');
+        },
+        DeleteMulti(){
+            this.$emit('DeleteAllSelected');
         }
     }
 }

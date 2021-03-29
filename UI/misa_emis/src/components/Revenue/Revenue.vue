@@ -34,8 +34,9 @@
                         />
                     <NewButton 
                     :Text="'Sắp lại thứ tự'"
-                        :second="true"/>
-                    <div class="trash-btn">
+                        :second="true"
+                        />
+                    <div class="trash-btn" @click="PopupDeleteMulti()">
 
                     </div>
                 </div>
@@ -114,7 +115,7 @@
             </div>
             <div class="footer">
                 <div class="result">
-                    Tổng số: <span class="count">7</span> kết quả.
+                    Tổng số: <span class="count">{{countRow()}}</span> kết quả.
                 </div>
             </div>
         </div>
@@ -141,8 +142,10 @@
         <!-- Popup hỏi người dùng có muốn xóa những dòng đã chọn hay không -->
         <DeletePopup 
         v-show="popup.deleteMulti"
-        :text="'Bạn có chắc muốn xóa những khoản thu đã chọn?'"
         :secondbtn="true"
+        :firstbtn="true"
+        :text="'Bạn có chắc muốn xóa những khoản thu đã chọn?'"
+        @DeleteMulti="DeleteAllSelected()"
         @DeleteCancel="DeleteCancel()"
         />
 
@@ -345,9 +348,11 @@ export default {
          * Hàm laod lại dữ liệu khi có thay đổi (Đang theo dõi)
          */
         LoadData: async function(){
+            this.loading = true
             this.Fees =  await axios.get('https://localhost:44341/api/v1/fee').then((respons)=>{
                 return respons.data
             })
+            this.loading = false
         },
         LoadDataStopFollow: async function(){
             this.Fees =  await axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((respons)=>{
@@ -391,7 +396,7 @@ export default {
                 return money+"đ/Năm học"
             }
         },
-
+        /**Hàm lấy danh sách những trường được chọn  */
         checkLine:function(feeId,selected){
             //Dùng hàm push để thêm khoản thu vừa chọn vào trong mảng
             if(selected == true){
@@ -401,6 +406,56 @@ export default {
                 this.ListFee.splice(index, 1);
             }
             console.log(this.ListFee)
+        },
+        /**Hàm đếm số lượng bản ghi đang có */
+        countRow(){
+            if(this.Fees.length >= 1){  
+                return this.Fees.length
+            }
+            else{
+                return 0;
+            }
+        },
+        PopupDeleteMulti(){
+            this.popup.deleteOne = false;
+            this.popup.deleteMulti = true;
+            this.popup.deleteFail = false;
+        },
+        /**
+         * 
+         */
+        DeleteAllSelected: async function(){
+            var rowaffect  = await axios({
+                method: 'DELETE',
+                url : 'https://localhost:44341/api/v1/Fee/DeleteMulti', 
+                data: JSON.stringify(this.ListFee), 
+                headers:{'Content-Type': 'application/json; charset=utf-8'}
+            }).then((result)=>{
+                return result.data.data;
+            })
+            //await axios.delete('https://localhost:44341/api/v1/Fee/DeleteMulti',JsonArray).then((result) => {
+            //     return result.data.data
+            // })
+            console.log(rowaffect);
+            this.popup.deleteOne = false;
+            this.popup.deleteMulti = false;
+            this.popup.deleteFail = false;
+            this.FeeId = '';
+            console.log(rowaffect)
+            if(rowaffect == 1){
+                this.notifyText = "Đã xóa những khoản thu này!"
+                this.notify = true;
+            }
+            else{
+                this.notifyText = "Bạn không thể xóa dữ liệu của hệ thống!"
+                this.notify = true;
+            }
+            if(this.selectedCheck == true){
+                this.LoadDataStopFollow()
+            }
+            else{
+                this.LoadData()
+            }
         }
     },
     async created() {

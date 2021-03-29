@@ -76,12 +76,40 @@ namespace MISA.Core.Service
             return serviceResult;
         }
 
+        /// <summary>
+        /// Xóa nhiều khoản thu 1 lúc
+        /// </summary>
+        /// <param name="feeIds">Danh sách id những khoản thu cần xáo</param>
+        /// <returns></returns>
         public ServiceResult DeleteMulti(List<Guid> feeIds)
         {
             var important = false;
-            foreach(Guid feeid in feeIds)
+            foreach(Guid feeId in feeIds)
             {
-                
+                var fee = feeRepository.GetObjectById<Fee>(feeId);
+                var system = fee.GetType().GetProperty("Important").GetValue(fee);
+                if (Convert.ToBoolean(system) == true)
+                {
+                    important = true;
+                }
+            }
+            //Important == false => Không có dữ liệu nào là dữ liệu của hệ thống . Cho phép xóa
+            if (important == false)
+            {
+                var rowaffect = 0;
+                foreach (Guid feeId in feeIds)
+                {
+                    rowaffect += feeRepository.DeleteObject<Fee>(feeId);
+                }
+                serviceResult.Data = rowaffect;
+                serviceResult.Code = MISACode.Success;
+                serviceResult.Msg = Properties.Resources.DeleteSuccess;
+            }
+            else
+            {
+                serviceResult.Msg = Properties.Resources.NotAllowDeleteThisData;
+                serviceResult.Code = MISACode.NoRecordDelete;
+                serviceResult.Data = 0;
             }
             return serviceResult;
         }

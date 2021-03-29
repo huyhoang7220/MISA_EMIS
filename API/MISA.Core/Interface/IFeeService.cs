@@ -23,5 +23,12 @@ namespace MISA.Core.Interface
         /// </summary>
         /// <returns></returns>
         ServiceResult GetFeeIsStopFollow();
+
+        /// <summary>
+        /// Hàm xóa nhiều dong dữ liệu 
+        /// </summary>
+        /// <param name="feeIds">Danh sách khóa chính của các khoản thu cần xóa</param>
+        /// <returns></returns>
+        ServiceResult DeleteMulti(List<Guid> feeIds);
     }
 }
