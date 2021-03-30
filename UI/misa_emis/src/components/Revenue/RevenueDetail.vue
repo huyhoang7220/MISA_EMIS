@@ -58,7 +58,7 @@
                                     >
                                     <div class="tooltip" 
                                         v-show="required.amountOfFee">
-                                            Dữ liệu không được để trống!
+                                            {{amountNotify}}
                                     </div>
                                 </div>
                                 <div class="unit-text">đ/</div>
@@ -265,7 +265,7 @@ export default {
         feeGroups: Object,
         unitFees: Object,
         feeRanges: Object,
-        update: Object
+        update: Object,
     },
     data() {
         return {
@@ -287,7 +287,10 @@ export default {
                 feeRange: false,
                 turnFee: false
             },
-            isValid: false
+            /**Biến kiểm tra dữ liệu xem đã hợp lệ hay chưa */
+            isValid: false,
+            /**Thông báo cho ô mức thu */
+            amountNotify: ''
         }
     },
     beforeUpdate(){
@@ -335,6 +338,7 @@ export default {
             if(this.isValid == true){
                 this.GetValue();
                 var rowaffect
+                console.log(this.NewFee)
                 if(this.update){
                     rowaffect = await axios.put('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> { return result.data.data})
                 }
@@ -369,9 +373,19 @@ export default {
         //     return money;
         // }
         FormatMoney(){
+
             //Xóa tooltip vì dữ liệu đã có
             this.required.amountOfFee = false
             var NewValue = document.getElementById("amount").value
+            if(NewValue.toString().indexOf("-") > -1){
+                this.required.amountOfFee = true;
+                this.amountNotify = 'Mức thu không có giá trị âm'
+            }
+            else{
+                this.required.amountOfFee = false;
+                
+            }
+            console.log(NewValue.toString().indexOf(""))
             //Khử dấu . để tạo thành chuỗi liên 
             NewValue = NewValue.toString().split(".").join("")
             // console.log(NewValue)
@@ -424,6 +438,7 @@ export default {
             /**Kiểm tra mức thu */
             if(amount == "" || amount == null || amount == undefined){
                 this.required.amountOfFee = true
+                this.amountNotify = 'Dữ liệu không được phép để trống'
                 this.isValid = false
             }
             else{

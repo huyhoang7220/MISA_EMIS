@@ -36,7 +36,7 @@
                     :Text="'Sắp lại thứ tự'"
                         :second="true"
                         />
-                    <div class="trash-btn" @click="DeleteAllSelected()">
+                    <div class="trash-btn" @click="PopupDeleteMulti()">
 
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                             @click="fee.selected = !fee.selected;checkLine(fee.feeId,fee.selected);" 
                             :class="{'selected-line':fee.selected}"></div>
                         </td>
-                        <td colspan="1" @click="RowEdit(fee)">
+                        <td colspan="1" @click="RowEdit(fee,GetFormatMoney(fee.amountOfFee))">
                             <div class="main-cell">
                                 <div class="cell-link">{{fee.feeName}}</div>
                                 <div class="important" v-if="fee.important">
@@ -272,22 +272,28 @@ export default {
         /**
          * Hàm đóng form thêm, sửa 
          */
-        CloseForm:function(){
+        CloseForm: async function(){
             this.show = false;
             this.focusOn = false;
             this.Fee = {}
-            this.selectedCheck = false;
-            this.LoadData();            
+            if(this.selectedCheck == true){
+                this.Fees = await axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((result)=>{return result.data})
+            }
+            else{
+                this.LoadData()
+            }  
         },
         /**
          * Hàm mở form để chỉnh sửa thông tin khoản thu
          * Dữ liệu được tải tự động lên form
          */
-        RowEdit: function(Fee){
+        RowEdit: function(Fee, amount){
             this.show = true;
             this.focusOn = true
+            console.log(amount)
             setTimeout(()=>{
                 this.Fee = {...Fee}
+                this.Fee.amountOfFee = amount
                 this.feeGroups = {...this.FeeGroups},
                 this.unitFees = {...this.UnitFees},
                 this.feeRanges = {...this.FeeRanges}
@@ -338,7 +344,7 @@ export default {
                     this.notify = true;
                 }
                 if(this.selectedCheck == true){
-                    this.LoadDataStopFollow()
+                    this.Fees = await axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((result)=>{return result.data})
                 }
                 else{
                     this.LoadData()
@@ -397,6 +403,12 @@ export default {
                 return money+"đ/Năm học"
             }
         },
+        /**Hàm định dạng lại số tiền */
+        GetFormatMoney(amount){
+            var money = amount.toFixed(0);
+            money = money.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1.');
+            return money
+        },
         /**Hàm lấy danh sách những trường được chọn  */
         checkLine:function(feeId,selected){
             //Dùng hàm push để thêm khoản thu vừa chọn vào trong mảng
@@ -426,6 +438,7 @@ export default {
          * Hàm xóa nhiều dữ liệu 1 lúc
          */
         DeleteAllSelected: async function(){
+            console.log(1)
             var rowaffect  = await axios({
                 method: 'DELETE',
                 url : 'https://localhost:44341/api/v1/Fee/DeleteMulti', 
@@ -441,13 +454,14 @@ export default {
             if(rowaffect >= 1){
                 this.notifyText = "Đã xóa những khoản thu này!"
                 this.notify = true;
+                this.ListFee = []
             }
             else{
                 this.notifyText = "Bạn không thể xóa dữ liệu của hệ thống!"
                 this.notify = true;
             }
             if(this.selectedCheck == true){
-                this.LoadDataStopFollow()
+                this.Fees = await axios.get('https://localhost:44341/api/v1/fee/feestopfollow').then((result)=>{return result.data})
             }
             else{
                 this.LoadData()
