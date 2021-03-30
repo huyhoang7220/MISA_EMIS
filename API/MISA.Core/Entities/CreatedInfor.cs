@@ -6,7 +6,7 @@ namespace MISA.Core.Entities
 {
     /// <summary>
     /// Created By VXKHANH
-    /// Created Date: 13/3/2021
+    /// Created Date: 24/03/2021
     /// </summary>
     public class CreatedInfor
     {

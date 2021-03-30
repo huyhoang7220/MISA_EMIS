@@ -5,7 +5,8 @@ using System.Text;
 namespace MISA.Core.Entities
 {
     /// <summary>
-    /// Created by: VXKHANH(26/3/2021)
+    /// Created by: VXKHANH
+    /// Created date: 26/3/2021
     /// </summary>
     public class UnitFee:CreatedInfor
     {

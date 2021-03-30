@@ -11,18 +11,20 @@ using System.Text;
 namespace MISA.Instructure.DataAccess
 {
     /// <summary>
-    /// Created by:VXKHANH(26/3/2021)
+    /// Created by:VXKHANH
+    /// Created date: 26/3/2021
     /// 
     /// </summary>
     public class BaseRepository:IBaseRepository
     {
-        /// <summary>
-        /// Created by : VXKHANH (21/3/2021)
-        /// </summary>
+        //Chuổi kết nối với database
         protected string connectionString = "User Id=dev;Host=47.241.69.179;Character Set=utf8; Database=MF761_VXKHANH_EMIS; Password=12345678; Port=3306";
+
         protected IDbConnection dbConnection;
 
         /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
         /// Hàm khởi tạo
         /// </summary>
         public BaseRepository()
@@ -31,9 +33,11 @@ namespace MISA.Instructure.DataAccess
         }
 
         /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
         /// Lấy toàn bộ danh sách
         /// </summary>
-        /// <typeparam name="entity">Class</typeparam>
+        /// <typeparam name="entity">Type</typeparam>
         /// <returns>Danh sách</returns>
         public IEnumerable<entity> GetAll<entity>()
         {
@@ -44,6 +48,8 @@ namespace MISA.Instructure.DataAccess
         }
 
         /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
         /// Lấy thông tin theo id
         /// </summary>
         /// <typeparam name="entity">Class</typeparam>
@@ -60,6 +66,8 @@ namespace MISA.Instructure.DataAccess
         }
 
         /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
         /// Thêm một bản ghi mới
         /// </summary>
         /// <typeparam name="entity">Class</typeparam>
@@ -74,6 +82,8 @@ namespace MISA.Instructure.DataAccess
         }
 
         /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
         /// Cập nhật thông tin về bản ghi mới
         /// </summary>
         /// <typeparam name="entity">Class</typeparam>
@@ -88,6 +98,8 @@ namespace MISA.Instructure.DataAccess
         }
 
         /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
         /// Xóa bản ghi thep id
         /// </summary>
         /// <typeparam name="entity">Class</typeparam>
@@ -102,7 +114,15 @@ namespace MISA.Instructure.DataAccess
             var result = dbConnection.Execute(procName, param: dynamicParam, commandType: CommandType.StoredProcedure);
             return result;
         }
-
+        /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
+        /// Lấy đối tượng theo tên và giá trị thuộc tính truyền vào
+        /// </summary>
+        /// <typeparam name="Entity">Type</typeparam>
+        /// <param name="propertyName">Tên thuộc tính</param>
+        /// <param name="propertyValue">Giá trị của thuộc tính</param>
+        /// <returns></returns>
         public Entity GetEntityByProperty<Entity>(string propertyName, object propertyValue)
         {
             var entityName = typeof(Entity).Name;

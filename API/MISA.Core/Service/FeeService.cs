@@ -7,7 +7,8 @@ using System.Text;
 namespace MISA.Core.Service
 {
     /// <summary>
-    /// Creatd by: VXKHANH(26/3/2021)
+    /// Creatd by: VXKHANH
+    /// Created date: 26/3/2021
     /// Service cho khoản thu
     /// </summary>
     public class FeeService:BaseService, IFeeService
@@ -17,7 +18,13 @@ namespace MISA.Core.Service
         {
             feeRepository = _feeRepository;
         }
-
+        /// <summary>
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
+        /// Lấy khoản thu theo tên khoản thu
+        /// </summary>
+        /// <param name="feeName">Tên khoản thu</param>
+        /// <returns>Đối tượng khoản thu</returns>
         public ServiceResult GetFeeByFeeName(string feeName)
         {
             var fee = feeRepository.GetFeeByFeeName(feeName);
@@ -36,6 +43,8 @@ namespace MISA.Core.Service
         }
 
         /// <summary>
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
         /// Lấy danh sách khoản thu ngừng theo dõi
         /// </summary>
         /// <returns></returns>
@@ -47,6 +56,8 @@ namespace MISA.Core.Service
         }
 
         /// <summary>
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
         /// Hàm xóa khoản thu có kiểm tra khoản 
         /// Nếu là 'Học phí' thì không cho phép xóa
         /// </summary>
@@ -77,6 +88,8 @@ namespace MISA.Core.Service
         }
 
         /// <summary>
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021 
         /// Xóa nhiều khoản thu 1 lúc
         /// </summary>
         /// <param name="feeIds">Danh sách id những khoản thu cần xáo</param>
@@ -115,6 +128,8 @@ namespace MISA.Core.Service
         }
 
         /// <summary>
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
         /// Hàm kiểm tra trường tên xem có phải học phí không. Nếu đúng thì không cho phép xóa
         /// </summary>
         /// <param name="Id"></param>

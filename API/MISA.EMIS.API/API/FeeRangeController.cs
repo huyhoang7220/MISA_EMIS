@@ -11,13 +11,16 @@ namespace MISA.EMIS.API.API
 {
 
     /// <summary>
-    /// Cerated by VXKHANH(26/3/2021)
+    /// Cerated by: VXKHANH
+    /// Created date: 26/3/2021
+    /// Controller Phạm vi thu
     /// </summary>
     public class FeeRangeController : BaseController<FeeRange>
     {
+        IFeeRangeService feeRangeService;
         public FeeRangeController(IFeeRangeService _feeRangeService) : base(_feeRangeService)
         {
-
+            feeRangeService = _feeRangeService;
         }
       
     }

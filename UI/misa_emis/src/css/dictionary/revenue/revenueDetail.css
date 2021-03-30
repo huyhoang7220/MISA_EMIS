@@ -1,7 +1,4 @@
-.popup{
-    resize: both;
-    overflow: auto;
-}
+
 .form{
 
     font-family: OpenSan-Regular;
@@ -16,6 +13,10 @@
     padding: 24px;
     padding-bottom: 16px;
     border-radius: 4px;
+    resize: both;
+    min-width: 860px;
+    min-height: 562px;
+    overflow: auto;
 }
 .blur{
     top: 0px;

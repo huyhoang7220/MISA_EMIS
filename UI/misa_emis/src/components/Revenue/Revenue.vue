@@ -32,7 +32,7 @@
                         :second="false"
                         @click="OpenForm()"
                         />
-                    <NewButton 
+                    <NewButton title="Xóa toàn bộ các khoản thu đã chọn"
                     :Text="'Sắp lại thứ tự'"
                         :second="true"
                         />
@@ -82,7 +82,7 @@
                         @change="fee.selected = false"
                         :class="{'row-focus':fee.selected}">
                         <td colspan="1"><div class="select-line"
-                            @click="fee.selected = !fee.selected;checkLine(fee.feeId,fee.selected);" 
+                            @click="fee.selected = !fee.selected;CheckLine(fee.feeId,fee.selected);" 
                             :class="{'selected-line':fee.selected}"></div>
                         </td>
                         <td colspan="1" @click="RowEdit(fee,GetFormatMoney(fee.amountOfFee))">
@@ -104,9 +104,9 @@
                         <td colspan="1" class="td-to-check"><div :class="{'cell-checking':fee.follow}"></div></td>
                         <td colspan="1">
                             <div class="last-cell">
-                                <div class="btn-edit" @click="RowEdit(fee)"></div>
-                                <div class="btn-copy"></div>
-                                <div class="btn-delete" @click="DeletePopup(fee.feeId)"></div>
+                                <div class="btn-edit" @click="RowEdit(fee)" title="Chỉnh sửa dòng dữ liệu này"></div>
+                                <div class="btn-copy" title="Sao chép dòng dữ liệu này"></div>
+                                <div class="btn-delete" @click="DeletePopup(fee.feeId)" title="Xóa dòng dữ liệu này"></div>
                             </div>
                         </td>
                     </tr>
@@ -115,7 +115,7 @@
             </div>
             <div class="footer">
                 <div class="result">
-                    Tổng số: <span class="count">{{countRow()}}</span> kết quả.
+                    Tổng số: <span class="count">{{CountRow()}}</span> kết quả.
                 </div>
             </div>
         </div>
@@ -205,15 +205,33 @@ export default {
             Fee:{},
             /**Biến lưu 1 giá trị khóa chính của khoản thu */
             FeeId: '',
-            /** */
+            /**
+             * Nhóm khoản thu lấy được từ server
+             */
             FeeGroups:{},
+            /**
+             * Dữ liệu được gửi qua prop vào Form thêm , sửa
+             */
             feeGroups:{},
+            /**
+             * Dữ liệu đơn vị khoản thu được lấy từ server
+             */
             UnitFees:{},
+            /**
+             * Đơn vị khoản thu truyền qua props vào from thêm sửa
+             */
             unitFees:{},
+            /**
+             * Phạm vi thu nhận được từ phía server
+             */
             FeeRanges:{},
+            /**
+             * Phạm vi thu truyền qua props vào from thêm, sửa
+             */
             feeRanges:{},
-            /**Biến bật preload*/
+            /**Biến bật tắt preload*/
             loading : false,
+            /**Danh sách khóa chính của các dòng trong lưới được đánh dấu  */
             ListFee:[]
         }
     },
@@ -224,6 +242,7 @@ export default {
     },
     watch:{
         /**
+         * Created by : VXKHANH
          * hàm theo dõi sự thay đổi  của biến focus 
          * Nếu biến này thay đổi thì Thực hiện focus đến ô Tên khoản thu
          */
@@ -235,6 +254,7 @@ export default {
     },
     methods:{
         /**
+         * Created by : VXKHANH
          * Hàm đóng thông báo. Dành cho thông báo lỗi hoặc thành công
          * Không thực hiện thêm event gì
          */
@@ -242,6 +262,8 @@ export default {
             this.notify = false;
         },
         /**
+         * Created by : VXKHANH
+         * 
          * Hàm laod khoản thu ngừng theo dõi
          */
         LoadFeeStopFollow:async function(){
@@ -254,6 +276,7 @@ export default {
             }
         },
         /**
+         * Cretated by: VXKHANH
          * Hàm mở form để thêm khoản thu mới
          */
         OpenForm: function(){
@@ -270,6 +293,7 @@ export default {
             this.update = false
         },
         /**
+         * Created by: VXKHANH
          * Hàm đóng form thêm, sửa 
          */
         CloseForm: async function(){
@@ -284,13 +308,14 @@ export default {
             }  
         },
         /**
+         * Created by: VXKHANH
          * Hàm mở form để chỉnh sửa thông tin khoản thu
          * Dữ liệu được tải tự động lên form
          */
         RowEdit: function(Fee, amount){
             this.show = true;
             this.focusOn = true
-            console.log(amount)
+            
             setTimeout(()=>{
                 this.Fee = {...Fee}
                 this.Fee.amountOfFee = amount
@@ -303,6 +328,7 @@ export default {
             
         },
         /**
+         * Created by: VXKHANH
          * Hàm xóa 1 dòng. Thực hiện sau khi nhẫn nút xóa trên popup
          */
         DeletePopup(FeeId){
@@ -310,6 +336,7 @@ export default {
             this.FeeId = FeeId;
         },
         /**
+         * Created by: VXKHANH
          * Hàm hủy xóa 
          */
         DeleteCancel:function(){
@@ -320,19 +347,18 @@ export default {
             this.ListFee = [];
         },
         /**
+         * Created by: VXKHANH
          * Hàm xóa 1 dòng dữ liệu
          * và đóng thông báo
          */
         DeleteOne: async function(FeeId){
             var rowaffect
             rowaffect = await axios.delete('https://localhost:44341/api/v1/Fee/'+FeeId).then((response)=>{ return response.data.data;})
-            console.log(rowaffect)
+            
             this.popup.deleteOne = false;
             this.popup.deleteMulti = false;
             this.popup.deleteFail = false;
             this.FeeId = '';
-            // setTimeout(()=>{
-                console.log(rowaffect)
 
                 if(rowaffect == 1){
                     this.notifyText = "Đã xóa khoản thu!"
@@ -352,6 +378,7 @@ export default {
               
             },
         /**
+         * Created by: VXKHANH
          * Hàm laod lại dữ liệu khi có thay đổi (Đang theo dõi)
          */
         LoadData: async function(){
@@ -367,6 +394,7 @@ export default {
             })
         },
         /**
+         * Created by: VXKHANH
          * Hàm format kỳ thu
          */
         TurnFeeFormat:function(turn){
@@ -384,6 +412,7 @@ export default {
             }
         },
         /**
+         * Created by: VXKHANH
          * Hàm format số tiền
          */
         FormatAmountOfFee(amount, turn){
@@ -403,14 +432,20 @@ export default {
                 return money+"đ/Năm học"
             }
         },
-        /**Hàm định dạng lại số tiền */
+        /**
+         * Created by : VXKHANH
+         * Hàm định dạng lại số tiền 
+         * */
         GetFormatMoney(amount){
             var money = amount.toFixed(0);
             money = money.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1.');
             return money
         },
-        /**Hàm lấy danh sách những trường được chọn  */
-        checkLine:function(feeId,selected){
+        /**
+         * Created by: VXKHANH
+         * Hàm lấy danh sách những trường được chọn  
+         * */
+        CheckLine:function(feeId,selected){
             //Dùng hàm push để thêm khoản thu vừa chọn vào trong mảng
             if(selected == true){
                 this.ListFee.push(feeId)
@@ -418,10 +453,9 @@ export default {
                 var index = this.ListFee.indexOf(feeId)
                 this.ListFee.splice(index, 1);
             }
-            console.log(this.ListFee)
         },
         /**Hàm đếm số lượng bản ghi đang có */
-        countRow(){
+        CountRow(){
             if(this.Fees.length >= 1){  
                 return this.Fees.length
             }
@@ -435,10 +469,11 @@ export default {
             this.popup.deleteFail = false;
         },
         /**
+         * created by: VXKHANH
+         * 
          * Hàm xóa nhiều dữ liệu 1 lúc
          */
         DeleteAllSelected: async function(){
-            console.log(1)
             var rowaffect  = await axios({
                 method: 'DELETE',
                 url : 'https://localhost:44341/api/v1/Fee/DeleteMulti', 
@@ -450,7 +485,7 @@ export default {
             this.popup.deleteOne = false;
             this.popup.deleteMulti = false;
             this.popup.deleteFail = false;
-            console.log(rowaffect)
+            
             if(rowaffect >= 1){
                 this.notifyText = "Đã xóa những khoản thu này!"
                 this.notify = true;

@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace MISA.EMIS.API.API
 {
+    /// <summary>
+    /// Controller Nhóm khách hàng
+    /// CreatedBy :VXKHANH
+    /// CreatedDate: 26/3/2021
+    /// </summary>
     public class FeeGroupController : BaseController<FeeGroup>
     {
         IFeeGroupService feeGroupService;

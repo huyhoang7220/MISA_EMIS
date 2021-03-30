@@ -32,6 +32,8 @@ namespace MISA.Core.Service
             serviceResult = new ServiceResult();
         }
         /// <summary>
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
         /// Lấy toàn bộ danh sách
         /// </summary>
         /// <typeparam name="entity">Class</typeparam>
@@ -43,6 +45,8 @@ namespace MISA.Core.Service
         }
 
         /// <summary>
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
         /// Lấy thông tin theo id
         /// </summary>
         /// <typeparam name="entity">Class</typeparam>
@@ -66,6 +70,9 @@ namespace MISA.Core.Service
         }
 
         /// <summary>
+        /// 
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
         /// Thêm một bản ghi mới
         /// </summary>
         /// <typeparam name="entity">Class</typeparam>
@@ -99,6 +106,8 @@ namespace MISA.Core.Service
         }
 
         /// <summary>
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
         /// Cập nhật thông tin về bản ghi mới
         /// </summary>
         /// <typeparam name="entity">Class</typeparam>
@@ -133,6 +142,9 @@ namespace MISA.Core.Service
         }
 
         /// <summary>
+        /// 
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
         /// Xóa bản ghi thep id
         /// </summary>
         /// <typeparam name="entity">Class</typeparam>
@@ -157,10 +169,22 @@ namespace MISA.Core.Service
             return serviceResult;
         }
 
+        /// <summary>
+        /// 
+        /// Creatd by: VXKHANH
+        /// Created date: 26/3/2021
+        /// Hàm validate chung
+        /// </summary>
+        /// <typeparam name="entity">Type</typeparam>
+        /// <param name="obj">Đối tượng</param>
+        /// <param name="state">trạng thái của phương thức</param>
+        /// <returns></returns>
         private ServiceResult BaseValidate<entity>(entity obj, StateCode state)
         {
             serviceResult.IsValid = true;
+            //Danh sách chứa các message lỗi
             var listError = new List<string>();
+            //Lấy ra danh sách thuộc tính của đối tượng
             var properties = obj.GetType().GetProperties();
             foreach(var property in properties)
             {
@@ -175,19 +199,22 @@ namespace MISA.Core.Service
                         serviceResult.IsValid = false;
                         serviceResult.Msg = Properties.Resources.ErrorMsg_DataIsNotValidate;
                         serviceResult.Code = MISACode.NotValid;
+                        //Lấy ra displayName của thuộc tính đấy
                         var displayName = property.GetCustomAttributes(typeof(DisplayNameAttribute), true).Cast<DisplayNameAttribute>().Single().DisplayName;
                         listError.Add(displayName + Properties.Resources.RequiredValue);
                     }
                 }
-                //Kiểm tra dữ lieju trùng lặp
+                //Kiểm tra dữ liệu trùng lặp
                 if(property.IsDefined(typeof(Duplicate), false))
                 {
+                    //Biến kiểm tra xem dữ liệu có thay đổi không. Nếu có thì kiểm tra trong database xem đã tồn tại dữ liệu đấy chưa
                     bool IsChange = false;
                     if (state == StateCode.Put)
                     {
                         var Id = obj.GetType().GetProperty($"{typeof(entity).Name}Id").GetValue(obj).ToString();
                         Guid GuidId = new Guid(Id);
                         var DBEntity = baseRepository.GetObjectById<entity>(GuidId);
+                        //Lấy dữ liệu trong database
                         var CurrentValue = property.GetValue(obj).ToString();
                         var DBValue = DBEntity.GetType().GetProperty(property.Name).GetValue(DBEntity).ToString();
                         if (CurrentValue != DBValue)
@@ -210,7 +237,6 @@ namespace MISA.Core.Service
                             listError.Add(displayName + Properties.Resources.DuplicatedValue);
                         }
                     }
-                    //Kiểm tra trùng dữ liệu
                     
                 }
             }

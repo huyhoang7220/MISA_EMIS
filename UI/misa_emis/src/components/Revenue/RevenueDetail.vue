@@ -265,7 +265,7 @@ export default {
         feeGroups: Object,
         unitFees: Object,
         feeRanges: Object,
-        update: Object,
+        update: Boolean,
     },
     data() {
         return {
@@ -337,15 +337,17 @@ export default {
             this.ValidateForm();
             if(this.isValid == true){
                 this.GetValue();
-                var rowaffect
-                console.log(this.NewFee)
+                var rowaffect = 0
                 if(this.update){
-                    rowaffect = await axios.put('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> { return result.data.data})
+                    rowaffect = await axios.put('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> { return result.data.data}).catch((error)=>{
+                        this.notifyText = 'Tên khoản thu không được trùng nhau'
+                        this.notifyShow = true
+                        return Promise.reject(error)
+                    })
                 }
                 else{
                     rowaffect = await axios.post('https://localhost:44341/api/v1/Fee',this.NewFee).then((result)=> {return result.data.data})
                 }
-                console.log(rowaffect)
                 if(rowaffect == 1){
                     if(this.update){
                         this.notifyText = 'Đã cập nhật dữ liệu.'
@@ -385,13 +387,13 @@ export default {
                 this.required.amountOfFee = false;
                 
             }
-            console.log(NewValue.toString().indexOf(""))
+            // console.log(NewValue.toString().indexOf(""))
             //Khử dấu . để tạo thành chuỗi liên 
             NewValue = NewValue.toString().split(".").join("")
             // console.log(NewValue)
             //Tách chuỗi liền nhau thành chuôi có dạng 00.000.000
             this.NewFee.amountOfFee = NewValue.replace(/(\d)(?=(?:\d{3})+$)/g, '$1.')
-            console.log(this.NewFee.amountOfFee)
+            
         },
 
         /**
@@ -402,7 +404,7 @@ export default {
                 this.NewFee.amountOfFee = this.NewFee.amountOfFee.split(".").join("")
             }
             this.NewFee.amountOfFee = parseFloat(this.NewFee.amountOfFee);
-            console.log(this.NewFee.amountOfFee)
+            // console.log(this.NewFee.amountOfFee)
         },
         /**Hàm validate dữ liệu cho các ô bắt buộc nhập */
         ValidateForm(){
@@ -463,7 +465,6 @@ export default {
                 this.required.turnFee = false
                 this.isValid = true
             }
-            console.log(this.isValid)
         }
     },
     // watch(){

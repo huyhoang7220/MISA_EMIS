@@ -5,7 +5,8 @@ using System.Text;
 namespace MISA.Core.Entities
 {
     /// <summary>
-    /// Created by : VXKHANH (14/3/2021)
+    /// Created by : VXKHANH 
+    /// Created date: 24/3/2021
     /// Class Enum
     /// </summary>
     public enum MISACode
