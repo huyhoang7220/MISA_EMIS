@@ -10,16 +10,33 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 namespace MISA.EMIS.API.API
 {
+    /// <summary>
+    /// CreatedBy :VXKHANH
+    /// CreatedDate: 26/3/2021
+    /// </summary>
+    /// <typeparam name="entity"></typeparam>
     [Route("api/v1/[controller]")]
     [ApiController]
     public class BaseController<entity> : ControllerBase
     {
         protected IBaseService _baseService;
+        /// <summary>
+        /// Hàm khởi tạo
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
+        /// </summary>
+        /// <param name="baseService"></param>
         public BaseController(IBaseService baseService)
         {
             //Tiêm IBaseService để chỉ định BaseService thực hiện các hàm của interface
             _baseService = baseService;
         }
+        /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
+        /// Lấy toàn bộ dữ liệu
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Get()
         {
@@ -27,6 +44,13 @@ namespace MISA.EMIS.API.API
             return Ok(response);
         }
 
+        /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
+        /// Lấy dữ liệu theo khóa chính
+        /// </summary>
+        /// <param name="Id">Giá trị khóa chính</param>
+        /// <returns></returns>
         [HttpGet("{Id}")]
         public IActionResult GetById(Guid Id)
         {
@@ -49,8 +73,15 @@ namespace MISA.EMIS.API.API
             }
         }
 
+        /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
+        /// Thêm dữ liệu
+        /// </summary>
+        /// <param name="obj">Đối tượng thêm</param>
+        /// <returns></returns>
         [HttpPost]
-        public IActionResult Post([FromBody] entity obj)
+        public IActionResult Post( entity obj)
         {
             try
             {
@@ -77,8 +108,15 @@ namespace MISA.EMIS.API.API
            
         }
 
+        /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
+        /// Cập nhật dữ liệu
+        /// </summary>
+        /// <param name="obj">Đối tượng cần sửa</param>
+        /// <returns>IActionResult()</returns>
         [HttpPut]
-        public IActionResult Put([FromBody] entity obj)
+        public IActionResult Put( entity obj)
         {
             try
             {
@@ -101,6 +139,13 @@ namespace MISA.EMIS.API.API
             }
         }
 
+        /// <summary>
+        /// CreatedBy :VXKHANH
+        /// CreatedDate: 26/3/2021
+        /// Xóa dữ liệu theo khóa chính
+        /// </summary>
+        /// <param name="Id">Khóa chính</param>
+        /// <returns></returns>
         [HttpDelete("{Id}")]
         public IActionResult Delete(Guid Id)
         {

@@ -106,7 +106,9 @@ namespace MISA.Core.Entities
         /// <summary>
         /// Tính chất của khoản thu
         /// </summary>
-        public string Quality { get; set; }
+        public int Quality { get; set; }
+
+        public bool Important { get; set; }
         #endregion
     }
 

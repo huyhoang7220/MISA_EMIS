@@ -6,7 +6,8 @@ using System.Text;
 namespace MISA.Core.Service
 {
     /// <summary>
-    /// created by : VXKHANH(26/3/2021)
+    /// Created by : VXKHANH
+    /// Created date: 26/3/2021
     /// </summary>
     public class UnitFeeService:BaseService, IUnitFeeService
     {

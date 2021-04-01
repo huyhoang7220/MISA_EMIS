@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace MISA.EMIS.API.API
 {
+    /// <summary>
+    /// CreatedBy :VXKHANH
+    /// CreatedDate: 26/3/2021
+    /// Controller đơn vị khoản thu
+    /// </summary>
     public class UnitFeeController : BaseController<UnitFee>
     {
         IUnitFeeService unitFeeService;

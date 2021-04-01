@@ -1,12 +1,13 @@
 <template>
     <div class="label">
-        <label for="">{{text}}</label>
+        <label for="">{{text}}<span class="required" v-if="required">*</span></label>
     </div>
 </template>
 <script>
 export default {
     props:{
         text: String,
+        required: Boolean
     }
 }
 </script>
@@ -17,5 +18,9 @@ export default {
         font-size: 12px;
         font-family: OpenSan-Regular;
         color: #757575;
+    }
+    .required{
+        color: red;
+        font-size: 12px;
     }
 </style>

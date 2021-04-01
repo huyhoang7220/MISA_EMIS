@@ -1,3 +1,17 @@
+.preload{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../../assets/image/messenger-typing-preloader.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100px 100px;
+    z-index: 200;
+    background-color: #000000;
+    opacity: 0.3;
+}
 .revenue{
     background: #EAECEF;
     width: 100%;
@@ -74,6 +88,7 @@ label{
 .trash-btn:hover{
     background-color: #f8f8f8;
 }
+/* bảng dữ liệu */
 .grid-list{
     padding-left: 16px;
     padding-right: 16px;
@@ -85,21 +100,58 @@ label{
     margin-bottom: 12px;
     white-space: nowrap;
 }
-
+.tooltip-cell::before{
+    content: '';
+    position: absolute;
+    border-top: 20px solid #4d4f5c;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    bottom: -18px;
+}
+.tooltip-cell{
+    background-color: #4d4f5c;
+    position: absolute;
+    left: -10px;
+    top: calc(-100% - 24px);
+    width: fit-content;
+    display: block;
+    padding: 0px 16px;
+    color: #ffffff;
+    width: max-content;
+    height: 32px;
+    display: none;
+}
+.important{
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-image: url('../../../assets/image/ic_Info_20.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-left: 12px;
+    border-radius: 20px;
+}
+.important:hover .tooltip-cell{
+    display: block;
+}
 .outline-table{
     border-collapse: collapse;
     overflow: auto;
     width: 100%;
     height: 100%;
     border: 1px solid #D5D8E6;
-    padding-right: -1px;
     z-index: 20;
+    position: relative;
+    padding-right: 0px;
 }
 .grid-list table{
-    border: 0px;
+    /* width: calc(100% + 2px); */
     width: 100%;
     border-collapse: collapse;
     margin: 0px;
+    /* min-width: 100%; */
+
 }
 .grid-list table tr{
     width: fit-content;
@@ -111,9 +163,18 @@ label{
     padding: 8px 8px;
     font-size: 13px;
     font-family: OpenSan-Semibold;
-    border: 1px solid#D5D8E6;
+    border: 1px solid #D5D8E6;
+    border-top: 0px;
     text-align: center;
     background-color:#f5f6fa;
+    position: sticky;
+    top: 0px;
+}
+.grid-list table tr th:first-child{
+    border-left: none;
+}
+.grid-list table tr th:last-child{
+    border-right: 0px;
 }
 .td-to-check{
     min-width: 60px;
@@ -148,8 +209,23 @@ label{
     padding-left: 12px;
     padding-right: 12px;
 }
+.row-focus{
+    background-color: #cce8ff !important;
+}
+.main-cell{
+    display: flex;
+    align-items: center;
+}
+.cell-link{
+    color: #0997EB;
+    cursor: pointer;
+}
 .grid-list table tr td:first-child{
     max-width: 36px !important;
+    border-left: none;
+}
+.grid-list table tr td:last-child{
+    border-right: none;
 }
 .line-forcus{
     background-color: #cce8ff;
@@ -169,12 +245,13 @@ label{
 }
 .cell-checking{
     width: 100%;
-    height: 20px;
+    height: 24px;
     background-image: url('~@/assets/image/ic_Check.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
+/* end bảng dữ liệu */
 .footer{
     height: 60px;
     width: 100%;
